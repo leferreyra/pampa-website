@@ -1,0 +1,7 @@
+*.log
+*.pot
+*.pyc
+settings.py
+*.db
+.directory
+*.swp
