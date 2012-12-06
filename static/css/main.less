@@ -1,3 +1,8 @@
+// Defino los colores base
+
+@rojo: #d40000;
+
+
 body {
 	margin: 0px;
 	padding: 0px;
@@ -16,7 +21,7 @@ body {
 #red-line {
 	position: fixed;
 	top:0px;
-	background: #d40000;
+	background: @rojo;
 	height: 1%;
 	width: 100%;
 	z-index: 100;
@@ -68,7 +73,7 @@ body {
 			span div {
 				width: 150%;
 			}
-			color: #d40000;
+			color: @rojo;
 			span.outter-text {
 				margin-left: -5px;
 			}
@@ -97,6 +102,25 @@ body {
 	bottom: 0px;
 	height: 50px;
 	width: 100%;
+	img {
+		position: relative;
+		top: -6px;
+		line-height: 50px;
+		display: inline-block;
+		padding: 0px 25px;
+		vertical-align: middle;
+		transition: all 0.1s ease-in-out;
+		cursor: pointer;
+		&:hover {
+			transform: scaleX(1.2) scaleY(1.2);
+		}
+		&:first-child {
+			padding-left: 50px;
+		}
+		&:last-child {
+			padding-right: 50px;
+		}
+	}
 }
 
 
