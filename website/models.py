@@ -40,3 +40,12 @@ class Fondo(models.Model):
 
 	def __unicode__(self):
 		return self.nombre
+
+class suscriptor(models.Model):
+	email= models.CharField(max_length=100)
+
+
+	def __unicode__(self):
+		return self.email
+
+	
