@@ -5,3 +5,5 @@ settings.py
 *.db
 .directory
 *.swp
+*~
+pampa/media/
