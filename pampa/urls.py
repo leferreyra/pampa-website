@@ -4,8 +4,14 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+
+	# Vista para el index
+	url(r'^$', 'website.views.index'),
+
+	# Vistas del admin
     url(r'^admin/', include(admin.site.urls)),
+
+    # Vistas json
     url(r'^collection/(?P<id_seccion>\d+)$', 'website.views.productos'),
     url(r'^collection/', "website.views.secciones"),
     url(r'^campaign/', "website.views.campania"),
