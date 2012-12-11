@@ -17,20 +17,36 @@
         <script type="text/javascript" src='js/prefixfree.js'></script>
         <script type="text/javascript" src='js/less.js'></script>
         <script type="text/javascript" src='js/jquery.js'></script>
+        <script type="text/javascript" src='js/pampa.js'></script>
 
 </head>
     <body>
+
+        <!-- Este div se utiliza para mostrar el contenido de cada seccion del sitio -->
         <div id="content"></div>
+
+
+        <!-- Este div crea la linea roja de arriba, es solo para diseño -->
         <div id="red-line"></div>
+
+
+        <!-- Este div contiene el logo del sitio y el fondo principal -->
         <div id="wrapper">
             <img class='logo' src='img/pampa-logo.png'>
         </div>
+
+
+        <!-- Para comenzar la animacion inicial para mostrar el menu hay que agregarle
+        la clase '.show' al div menu. -->
         <div class='menu'>
             <div class='button d1 active'><span class='outter-text'><span class='inner-text'>Colección</span><div></div></span></div>
             <div class='button d2'><span class='outter-text'><span class='inner-text'>Campañas</span><div></div></span></div>
             <div class='button d3'><span class='outter-text'><span class='inner-text'>Tienda en Línea</span><div></div></span></div>
             <div class='button d4'><span class='outter-text'><span class='inner-text'>Contacto</span><div></div></span></div>
         </div>
+
+
+        <!-- Al agregarle la clase '.loading' el apartado subscribe cambia de estado a loading -->
         <div id="subscribe">
             <p>Ingresa tu e-mail para recibir novedades y ofertas!</p>
             <input type="text" name='subscribe-mail' placeholder='E-mail'>
@@ -38,6 +54,8 @@
                 <img src="img/loading.gif" alt="Cargando">
             </div>
         </div>
+
+
         <div class='footer'>
             <p>
                 <img src="img/marcas/piccadilly.png" alt="">
