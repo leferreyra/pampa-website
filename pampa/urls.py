@@ -8,8 +8,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^collection/(?P<id_seccion>\d+)$', 'website.views.productos'),
     url(r'^collection/', "website.views.secciones"),
-    url(r'^campaign/', "website.views.camapania"),
+    url(r'^campaign/', "website.views.campania"),
     url(r'^background/', "website.views.fondos"),
-
-
 )
