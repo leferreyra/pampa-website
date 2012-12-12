@@ -21,6 +21,7 @@ urlpatterns = patterns('',
 
 # Configuraciones adicionales para servir archivos media,
 # cuando trabajamos con el servidor de desarrollo
+import settings
 if settings.DEBUG:
     from django.views.static import serve
     _media_url = settings.MEDIA_URL
