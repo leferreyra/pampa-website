@@ -10,14 +10,14 @@
           Pampa Moda
         </title>
 
-        <!-- <link rel="stylesheet" href="css/main.css"> -->
-        <link rel="stylesheet/less" type="text/css" href="css/main.less">
-        <link rel="shortcut icon" href="img/fav.png" type="ico/png">
+        <!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/main.css"> -->
+        <link rel="stylesheet/less" type="text/css" href="{{ STATIC_URL }}css/main.less">
+        <link rel="shortcut icon" href="{{ STATIC_URL }}img/fav.png" type="ico/png">
 
-        <script type="text/javascript" src='js/prefixfree.js'></script>
-        <script type="text/javascript" src='js/less.js'></script>
-        <script type="text/javascript" src='js/jquery.js'></script>
-        <script type="text/javascript" src='js/pampa.js'></script>
+        <script type="text/javascript" src='{{ STATIC_URL }}js/prefixfree.js'></script>
+        <script type="text/javascript" src='{{ STATIC_URL }}js/less.js'></script>
+        <script type="text/javascript" src='{{ STATIC_URL }}js/jquery.js'></script>
+        <script type="text/javascript" src='{{ STATIC_URL }}js/pampa.js'></script>
 
 </head>
     <body>
@@ -32,7 +32,7 @@
 
         <!-- Este div contiene el logo del sitio y el fondo principal -->
         <div id="wrapper">
-            <img class='logo' src='img/pampa-logo.png'>
+            <img class='logo' data-src='{{ STATIC_URL }}img/pampa-logo.png'>
         </div>
 
 
@@ -51,18 +51,18 @@
             <p>Ingresa tu e-mail para recibir novedades y ofertas!</p>
             <input type="text" name='subscribe-mail' placeholder='E-mail'>
             <div class='subscribe-loading'>
-                <img src="img/loading.gif" alt="Cargando">
+                <img data-src="{{ STATIC_URL }}img/loading.gif" alt="Cargando">
             </div>
         </div>
 
 
         <div class='footer'>
             <p>
-                <img src="img/marcas/piccadilly.png" alt="">
-                <img src="img/marcas/lady-stork.png" alt="">
-                <img src="img/marcas/west-coast.png" alt="">
-                <img src="img/marcas/taverniti.png" alt="">
-                <img src="img/marcas/scombro.png" alt="">
+                <img data-src="{{ STATIC_URL }}img/marcas/piccadilly.png" alt="">
+                <img data-src="{{ STATIC_URL }}img/marcas/lady-stork.png" alt="">
+                <img data-src="{{ STATIC_URL }}img/marcas/west-coast.png" alt="">
+                <img data-src="{{ STATIC_URL }}img/marcas/taverniti.png" alt="">
+                <img data-src="{{ STATIC_URL }}img/marcas/scombro.png" alt="">
             </p>
         </div>
     </body>
