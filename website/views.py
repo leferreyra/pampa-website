@@ -50,8 +50,5 @@ def campania(request):
 
 def fondos(request):
 
-<<<<<<< HEAD
-=======
     fondos = serializers.serialize('json', Fondo.objects.all().order_by('id').reverse()[:1]) 
     return HttpResponse(simplejson.dumps(fondos), mimetype='application/json')
->>>>>>> aff69b7f9f3bd5e7d05b5fcb5ac4b640c64bfe1a
