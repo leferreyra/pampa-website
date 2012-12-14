@@ -6,7 +6,8 @@ var Pampa = {}
 $(document).ready(function(){
 
 	// Comenzar la carga
-	Pampa.load();
+	// Agregamos un delay, para simular el tiempo de descarga (Provisorio)
+	setTimeout(Pampa.load, 4000);
 
 });
 
@@ -33,7 +34,10 @@ Pampa.load_images = function(){
 	// Se obtienen todas las imagenes del html
 	image_list = document.images;
 
-	Pampa.img_count = image_list.length;
+	// Se obtiene el total de imagenes a cargar
+	// El -1 es por la imagen adicional del preloader, cuya descarga
+	// no sera controlada por la aplicacion.
+	Pampa.img_count = image_list.length - 1;
 
 	// Se lleva un contador de imagenes cargadas
 	Pampa.loaded_img_count = 0;   
@@ -79,15 +83,27 @@ Pampa.load_background = function (){
 	$.getJSON('background/', function(data){
 
 		json = $.parseJSON(data);
+		src_img = 'media/' + json[0].fields.foto_fondo;
 
-		$('#wrapper').css('background-image', 'url("media/'+ json[0].fields.foto_fondo +'")');
+		// Creamos el objeto imagen para comenzar a descargarla
+		backimg = new Image();
+
+		backimg.onload = function(){
+
+			// Actualizamos el estado de carga del fondo
+			Pampa.resources_loading_state['background'] = true;
+
+			// Llamamos al control de carga de recursos
+			Pampa.check_loading_state();	
+
+			// Finalmente, agregamos la imagen como fondo con CSS
+			$('#wrapper').css('background-image', 'url("'+ src_img +'")');
+
+		}
+
+		// Asignamos el atributo src para comenzar la descarga
+		backimg.src = src_img;
 		
-		// Actualizamos el estado de carga del fondo
-		Pampa.resources_loading_state['background'] = true;
-
-		// Llamamos al control de carga de recursos
-		Pampa.check_loading_state();
-
 	});
 
 }
@@ -110,5 +126,13 @@ Pampa.check_loading_state = function(){
 
 // Funcion llamada cuando todos los recursos han sido cargados
 Pampa.on_load_complete = function(){
+
 	console.log('Carga completa');
+
+	// Ocultamos el div de loading (Provisorio)
+	$('#loading').addClass('hide');
+
+	// Mostramos el menu (Provisorio)
+	$('.menu').addClass('show');
+
 }
