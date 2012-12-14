@@ -29,11 +29,11 @@ def productos(request, id_seccion):
 	
 	size = 128, 128
 
-	dir_miniaturas = settings.MEDIA_ROOT + "/miniaturas/"
+	dir_miniaturas = settings.MEDIA_ROOT + "miniaturas/"
 
 	for producto in produc:
 
-		im = Image.open(settings.MEDIA_ROOT + "/" +producto.imagen_1.url)
+		im = Image.open("/home/paslo/pampa-website/" +producto.imagen_1.url)
 		im.thumbnail(size, Image.ANTIALIAS)
 	
 		im.save( dir_miniaturas + str(producto.id) + "_imagen_1_miniatura" , "JPEG")
