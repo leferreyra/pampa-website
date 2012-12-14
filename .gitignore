@@ -6,4 +6,4 @@ settings.py
 .directory
 *.swp
 *~
-pampa/media/
+media/

@@ -45,16 +45,25 @@ body {
 @button_height:30px; // Esto settea la altura de los botones.
 
 .menu {
+
 	position: fixed;
 	top: 200px;
 	width: 350px;
 	z-index: 100;
+
+	&.show { 
+		.button { 
+			animation-play-state: running;
+		} 
+	}
+
 	.button {
 
 		animation-name: bounce-in;
 		animation-duration: 2s;
 		animation-iteration-count: 1;
 		animation-fill-mode: both;
+		animation-play-state: paused;
 
 		padding: 0px 20px;
 		color: white;
@@ -81,7 +90,9 @@ body {
 				transition: width 0.2s ease-in-out;
 			}
 		}
+
 		&:hover {
+
 			span div {
 				width: 150%;
 			}
@@ -90,6 +101,7 @@ body {
 				margin-left: -5px;
 			}
 		}
+
 	}
 }
 

@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <title>
+          Pampa Moda
+        </title>
+
+        <!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/main.css"> -->
+        <link rel="stylesheet/less" type="text/css" href="{{ STATIC_URL }}css/main.less">
+        <link rel="shortcut icon" href="{{ STATIC_URL }}img/fav.png" type="ico/png">
+
+        <script type="text/javascript" src='{{ STATIC_URL }}js/prefixfree.js'></script>
+        <script type="text/javascript" src='{{ STATIC_URL }}js/less.js'></script>
+        <script type="text/javascript" src='{{ STATIC_URL }}js/jquery.js'></script>
+        <script type="text/javascript" src='{{ STATIC_URL }}js/pampa.js'></script>
+
+</head>
+    <body>
+
+        <!-- Este div se utiliza para mostrar el contenido de cada seccion del sitio -->
+        <div id="content"></div>
+
+
+        <!-- Este div crea la linea roja de arriba, es solo para diseño -->
+        <div id="red-line"></div>
+
+
+        <!-- Este div contiene el logo del sitio y el fondo principal -->
+        <div id="wrapper">
+            <img class='logo' data-src='{{ STATIC_URL }}img/pampa-logo.png'>
+        </div>
+
+
+        <!-- Para comenzar la animacion inicial para mostrar el menu hay que agregarle
+        la clase '.show' al div menu. -->
+        <div class='menu'>
+            <div class='button d1 active'><span class='outter-text'><span class='inner-text'>Colección</span><div></div></span></div>
+            <div class='button d2'><span class='outter-text'><span class='inner-text'>Campañas</span><div></div></span></div>
+            <div class='button d3'><span class='outter-text'><span class='inner-text'>Tienda en Línea</span><div></div></span></div>
+            <div class='button d4'><span class='outter-text'><span class='inner-text'>Contacto</span><div></div></span></div>
+        </div>
+
+
+        <!-- Al agregarle la clase '.loading' el apartado subscribe cambia de estado a loading -->
+        <div id="subscribe">
+            <p>Ingresa tu e-mail para recibir novedades y ofertas!</p>
+            <input type="text" name='subscribe-mail' placeholder='E-mail'>
+            <div class='subscribe-loading'>
+                <img data-src="{{ STATIC_URL }}img/loading.gif" alt="Cargando">
+            </div>
+        </div>
+
+
+        <div class='footer'>
+            <p>
+                <img data-src="{{ STATIC_URL }}img/marcas/piccadilly.png" alt="">
+                <img data-src="{{ STATIC_URL }}img/marcas/lady-stork.png" alt="">
+                <img data-src="{{ STATIC_URL }}img/marcas/west-coast.png" alt="">
+                <img data-src="{{ STATIC_URL }}img/marcas/taverniti.png" alt="">
+                <img data-src="{{ STATIC_URL }}img/marcas/scombro.png" alt="">
+            </p>
+        </div>
+    </body>
+</html>
