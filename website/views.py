@@ -35,10 +35,10 @@ def productos(request, id_seccion):
 			}
 
 		if producto.imagen_2: 
-			newobj.imagen_2 = producto.imagen_2.url
-
-
-	productos.append(newobj)
+			newobj['imagen_2'] = producto.imagen_2.url
+		
+		productos.append(newobj)
+	
 	return HttpResponse(dumps(productos), mimetype='application/json')
 
 
@@ -50,5 +50,5 @@ def campania(request):
 
 def fondos(request):
 
-    fondos = serializers.serialize('json', Fondo.objects.all()) 
+    fondos = serializers.serialize('json', Fondo.objects.all().order_by('id').reverse()[:1]) 
     return HttpResponse(simplejson.dumps(fondos), mimetype='application/json')
