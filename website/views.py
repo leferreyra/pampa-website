@@ -27,16 +27,20 @@ def productos(request, id_seccion):
 	produc = Producto.objects.filter(secciones= id_seccion)
 	productos= []
 	
-	size = 128, 128
-
-	dir_miniaturas = settings.MEDIA_ROOT + "/miniaturas/"
+	dir_miniaturas = settings.MEDIA_ROOT + "miniaturas/"
 
 	for producto in produc:
+		
+		try:
+			fichero = open(dir_miniaturas + str(producto.id) + "_imagen_1_miniatura")
+			fichero.close()
+		except:
+			im = Image.open(settings.MEDIA_ROOT + producto.imagen_1.url)
+			size = im.size
+			newsize = (int(round(size[0]*0.25)), int(round(size[1]*0.25)))
 
-		im = Image.open(settings.MEDIA_ROOT + "/" +producto.imagen_1.url)
-		im.thumbnail(size, Image.ANTIALIAS)
-	
-		im.save( dir_miniaturas + str(producto.id) + "_imagen_1_miniatura" , "JPEG")
+   			im.thumbnail(newsize, Image.ANTIALIAS)
+   			im.save( dir_miniaturas + str(producto.id) + "_imagen_1_miniatura" , "JPEG")
 
 		newobj = {
 				'id_producto': producto.id,
@@ -44,19 +48,25 @@ def productos(request, id_seccion):
 				'mensaje': producto.mensaje,
 				'imagen_1': producto.imagen_1.url,
 				'imagen_2': '',
-				'miniatura_1': dir_miniaturas + str(producto.id) + "_imagen_1_miniatura.JPEG",
+				'miniatura_1': dir_miniaturas + str(producto.id) + "_imagen_1_miniatura",
 				'miniatura_2': '',
 				
 			}
 
 		if producto.imagen_2: 
 			newobj['imagen_2'] = producto.imagen_2.url
+			try:
+				fichero = open(dir_miniaturas + str(producto.id) + "_imagen_2_miniatura")
+				fichero.close()
+			except:
+				im = Image.open(settings.MEDIA_ROOT + producto.imagen_2.url)
+				size = im.size
+				newsize = (int(round(size[0]*0.25)), int(round(size[1]*0.25)))
+				im.thumbnail(newsize, Image.ANTIALIAS)
+				im.save(dir_miniaturas + str(producto.id) + "_imagen_2_miniatura" , "JPEG")			
+
 			
-			im = Image.open(settings.MEDIA_ROOT + "/" +producto.imagen_2.url)
-			im.thumbnail(size, Image.ANTIALIAS)
-			
-			im.save(dir_miniaturas + str(producto.id) + "_imagen_2_miniatura" , "JPEG")
-			newobj['miniatura_2'] = dir_miniaturas + str(producto.id) + "_imagen_2_miniatura.JPEG",
+			newobj['miniatura_2'] = dir_miniaturas + str(producto.id) + "_imagen_2_miniatura",
 		
 		productos.append(newobj)
 	
