@@ -16,13 +16,14 @@ Pampa.resources_loading_state = {
 	// 'fonts': false,
 	// 'music': false,
 	'images': false,
-	// 'background': false,
+	'background': false,
 }
 
 Pampa.load = function(){
 
 	// Comenzar la carga por recursos
 	Pampa.load_images();
+	Pampa.load_background();
 
 }
 
@@ -70,6 +71,27 @@ Pampa.check_images_loaded = function(){
 		Pampa.check_loading_state();
 	}
 }
+
+
+Pampa.load_background = function (){
+
+	// Realizamos la consulta del fondo al servidor con AJAX
+	$.getJSON('background/', function(data){
+
+		json = $.parseJSON(data);
+
+		$('#wrapper').css('background-image', 'url("media/'+ json[0].fields.foto_fondo +'")');
+		
+		// Actualizamos el estado de carga del fondo
+		Pampa.resources_loading_state['background'] = true;
+
+		// Llamamos al control de carga de recursos
+		Pampa.check_loading_state();
+
+	});
+
+}
+
 
 // Cada vez que un recurso termina de cargar, 
 // se llama a esta funcion para comprobar si todos los recursos
