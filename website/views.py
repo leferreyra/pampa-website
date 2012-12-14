@@ -5,6 +5,9 @@ from django.utils import simplejson
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from json import dumps
+from PIL import Image
+from pampa import settings
+
 
 
 def index(request):
@@ -23,8 +26,17 @@ def productos(request, id_seccion):
 	
 	produc = Producto.objects.filter(secciones= id_seccion)
 	productos= []
+	
+	size = 128, 128
+
+	dir_miniaturas = settings.MEDIA_ROOT + "/miniaturas/"
 
 	for producto in produc:
+
+		im = Image.open(settings.MEDIA_ROOT + "/" +producto.imagen_1.url)
+		im.thumbnail(size, Image.ANTIALIAS)
+	
+		im.save( dir_miniaturas + str(producto.id) + "_imagen_1_miniatura" , "JPEG")
 
 		newobj = {
 				'id_producto': producto.id,
@@ -32,10 +44,19 @@ def productos(request, id_seccion):
 				'mensaje': producto.mensaje,
 				'imagen_1': producto.imagen_1.url,
 				'imagen_2': '',
+				'miniatura_1': dir_miniaturas + str(producto.id) + "_imagen_1_miniatura.JPEG",
+				'miniatura_2': '',
+				
 			}
 
 		if producto.imagen_2: 
 			newobj['imagen_2'] = producto.imagen_2.url
+			
+			im = Image.open(settings.MEDIA_ROOT + "/" +producto.imagen_2.url)
+			im.thumbnail(size, Image.ANTIALIAS)
+			
+			im.save(dir_miniaturas + str(producto.id) + "_imagen_2_miniatura" , "JPEG")
+			newobj['miniatura_2'] = dir_miniaturas + str(producto.id) + "_imagen_2_miniatura.JPEG",
 		
 		productos.append(newobj)
 	
