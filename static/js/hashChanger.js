@@ -5,6 +5,7 @@ var go_to = {
 		//Pampa.showLoading();
 		// Pido al servidor todas las secciones
 		$.getJSON('/collection/', function(data) {
+
 			var json = $.parseJSON(data);
 			// lista de botones que se añadiran al menu, depende de la cantidad de 
 			// elementos que tenga la coleccion
@@ -23,6 +24,7 @@ var go_to = {
 					// se llama a la funcion de carga de la seccion clickeada
 					$.History.go(dir + id)
 					// go_to[dir](id);
+
 					}
 				}
 				// se agrega el boton a la lista
@@ -34,7 +36,7 @@ var go_to = {
 	},
 	'/coleccion/seccion/' : function(name) {
 		// Pampa.showLoading();
-		document.location.hash = '#!/coleccion/seccion/'+name;
+		document.location.hash = '#/coleccion/seccion/'+name;
 		$.getJSON('collection/'+name, function(data) {
 			for (var i = data.length - 1; i >= 0; i--) {
 				console.log(data[i].imagen_1)
