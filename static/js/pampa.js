@@ -148,31 +148,31 @@ Pampa.on_load_complete = function(){
 // Definimos el menu principal
 Pampa.menuItems = [
 	{ 
-		id: '',
+		id: '/coleccion',
 		name: 'Colección',
-		link: '#!/collection',
-		callback: function(){ console.log('Se ha presionado el boton, coleccion'); }
+		link: '#/collection',
+		callback: function(){ $.History.go('/coleccion'); console.log('Se ha presionado el boton, coleccion'); }
 	},
 
 	{ 
-		id: '',
+		id: '/campania',
 		name: 'Campañas',
-		link: '#!/campaign',
-		callback: function(){}
+		link: '#/campaign',
+		callback: function(){$.History.go('/campania'); }
 	},
 
 	{ 
-		id: '',
+		id: '/tienda',
 		name: 'Tienda en línea',
-		link: '#!/store',
-		callback: function(){}
+		link: '#/store',
+		callback: function(){$.History.go('/tienda');}
 	},
 
 	{ 
-		id: '',
+		id: '/contact',
 		name: 'Contacto',
-		link: '#!/contact',
-		callback: function(){ console.log('contacto?, todo lo que tu quieras mami..'); }
+		link: '#/contact',
+		callback: function(){$.History.go('/contacto'); console.log('contacto?, todo lo que tu quieras mami..'); }
 	},
 ];
 
