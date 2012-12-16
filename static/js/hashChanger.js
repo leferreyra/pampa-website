@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	// Recupero el HashTag en el caso del ingreso a la página con cierto Hash cargado
 	var hash = document.location.hash;
-	$('.menu').addClass('show');
+	// $('.menu').addClass('show');
 	// Verifico la existencia del Hash
 	if (hash) {
 		// Llamada a la funcion encargada de cargar la seccion a la que se accede
