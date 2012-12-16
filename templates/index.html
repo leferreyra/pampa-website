@@ -17,10 +17,21 @@
         <script type="text/javascript" src='{{ STATIC_URL }}js/prefixfree.js'></script>
         <script type="text/javascript" src='{{ STATIC_URL }}js/less.js'></script>
         <script type="text/javascript" src='{{ STATIC_URL }}js/jquery.js'></script>
+        <script type="text/javascript" src='{{ STATIC_URL }}js/mustache.js'></script>
         <script type="text/javascript" src='{{ STATIC_URL }}js/pampa.js'></script>
 
 </head>
     <body>
+
+        <!-- Definimos la plantilla del html para el menu -->
+        <script id='menu-item-template' type='text/html'>
+            <div data-id='[[data_id]]' id='[[id]]' class='button'>
+                <span class='outter-text'>
+                    <span class='inner-text'>[[name]]</span>
+                    <div></div>
+                </span>
+            </div>
+        </script>
 
         <!-- Este div se utiliza para indicar cuando el sitio esta cargando -->
         <div id="loading">
@@ -43,11 +54,8 @@
 
         <!-- Para comenzar la animacion inicial para mostrar el menu hay que agregarle
         la clase '.show' al div menu. -->
-        <div class='menu'>
-            <div class='button d1 active'><span class='outter-text'><span class='inner-text'>Colección</span><div></div></span></div>
-            <div class='button d2'><span class='outter-text'><span class='inner-text'>Campañas</span><div></div></span></div>
-            <div class='button d3'><span class='outter-text'><span class='inner-text'>Tienda en Línea</span><div></div></span></div>
-            <div class='button d4'><span class='outter-text'><span class='inner-text'>Contacto</span><div></div></span></div>
+        <div class='menu menu-animate'>
+            <!-- El contenido del menu se genera dinamicamente -->
         </div>
 
 

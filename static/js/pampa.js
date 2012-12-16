@@ -5,9 +5,13 @@ var Pampa = {}
 
 $(document).ready(function(){
 
+	// Cargamos el menu con los botones iniciales
+	Pampa.menuElement = $('.menu')[0];
+	Pampa.changeMenuItems(Pampa.menuItems);
+	Pampa.setTopMenuDelays();
+
 	// Comenzar la carga
-	// Agregamos un delay, para simular el tiempo de descarga (Provisorio)
-	setTimeout(Pampa.load, 4000);
+	Pampa.load();
 
 });
 
@@ -135,4 +139,112 @@ Pampa.on_load_complete = function(){
 	// Mostramos el menu (Provisorio)
 	$('.menu').addClass('show');
 
+}
+
+
+// Funciones del menu principal
+// ============================
+
+// Definimos el menu principal
+Pampa.menuItems = [
+	{ 
+		id: '',
+		name: 'Colección',
+		link: '#!/collection',
+		callback: function(){ console.log('Se ha presionado el boton, coleccion'); }
+	},
+
+	{ 
+		id: '',
+		name: 'Campañas',
+		link: '#!/campaign',
+		callback: function(){}
+	},
+
+	{ 
+		id: '',
+		name: 'Tienda en línea',
+		link: '#!/store',
+		callback: function(){}
+	},
+
+	{ 
+		id: '',
+		name: 'Contacto',
+		link: '#!/contact',
+		callback: function(){ console.log('contacto?, todo lo que tu quieras mami..'); }
+	},
+];
+
+
+// Agregamos las clases de delay del menu principal
+Pampa.setTopMenuDelays = function(){	
+	prefix = 'd';
+	$.each($('.button'), function(index, element){
+		element.className += ' d'+(index+1);
+	});
+}
+
+
+// Intercambia los elementos actuales del menu por otros elementos
+Pampa.changeMenuItems = function(btnlist){
+
+	// Borra los elementos actuales
+	Pampa.clearMenu();
+
+	// Creamos una lista para guardar los callbacks y bindear al final
+	callbacks = {}
+
+	// Por cada elemento nuevo de la lista, hacemos un render de 
+	// la plantilla de Mustache, de elemento del menu
+	$.each(btnlist, function(index, element){
+
+		// Alias corto para el elemento del menu
+		m = Pampa.menuElement;
+
+		// Creamos un id para poder bindear el callback despues.
+		id = 'button_' + (index+1);
+
+		// Datos para el nuevo elemento
+		data = { 
+			'data_id': element.id,
+			'name': element.name,
+			'link': element.link,
+			'id': id
+		}
+
+		// Concatenamos el contenido actual con el nuevo elemento del menu
+		newhtml = m.innerHTML + Mustache.render($('#menu-item-template').html(), data);
+
+		// Cambiamos el contenido del menu
+		m.innerHTML = newhtml;
+
+		// Agregar callback a la lista
+		callbacks[id] = element.callback;
+
+	});
+
+	// Bindear los callbacks
+	$.each(callbacks, function(idx, cb){
+		$('#'+idx).click(cb);
+	});
+
+}
+
+// Vacia los elementos del menu
+Pampa.clearMenu = function(){
+	Pampa.menuElement.innerHTML = '';
+}
+
+// Hace uso de Pampa.changeMenuItems pero le pone animaciones
+Pampa.changeMenu = function(btnlist){
+
+	// Obtenemos nombre corto de .menu
+	m = $('.menu');
+
+	// Animamos hacia afuera, cambiamos los items, y animamos hacia adentro.	
+	m.animate({left:m.width(), opacity: 0}, 100, function(){
+		Pampa.changeMenuItems(btnlist);
+	});
+	m.animate({left: 0, opacity: 1}, {duration: 100, queue: true});
 }
