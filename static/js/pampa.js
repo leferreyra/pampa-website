@@ -11,7 +11,7 @@ $(document).ready(function(){
 	Pampa.setTopMenuDelays();
 
 	// Comenzar la carga
-	Pampa.load();
+	setTimeout(Pampa.load, 4000);
 
 });
 
