@@ -1,6 +1,8 @@
 #encoding:utf-8
 
 from django.db import models
+from website.thumbs import ImageWithThumbsField
+
 
 
 class Seccion(models.Model):
@@ -16,8 +18,8 @@ class Producto(models.Model):
 
     nombre = models.CharField(max_length=100)
     mensaje= models.CharField(max_length=15, null= True, blank= True)
-    imagen_1 = models.ImageField(upload_to='productos', verbose_name='Imágen delantera')
-    imagen_2 = models.ImageField(upload_to='productos', verbose_name='Imágen trasera', null= True, blank= True)
+    imagen_1 = ImageWithThumbsField(upload_to='productos', verbose_name='Imágen delantera', sizes=((200,200),))
+    imagen_2 = ImageWithThumbsField(upload_to='productos', verbose_name='Imágen trasera', null= True, blank= True, sizes=((200,200),))
     secciones = models.ManyToManyField(Seccion)
 
 
