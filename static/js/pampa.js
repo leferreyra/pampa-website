@@ -14,7 +14,7 @@ $(document).ready(function(){
 	Pampa.loadingElement = $('#loading');
 
 	// Comenzar la carga
-	setTimeout(Pampa.load, 4000);
+	Pampa.load();
 
 });
 
@@ -161,6 +161,12 @@ Pampa.on_load_complete = function(){
 Pampa.menuItems = [
 	{ 
 		id: '',
+		name: 'BACK',
+		link: '#!/',
+		callback: function(){ console.log('back up!'); }
+	},
+	{ 
+		id: '',
 		name: 'Colección',
 		link: '#!/collection',
 		callback: function(){ console.log('Se ha presionado el boton, coleccion'); }
@@ -205,7 +211,16 @@ Pampa.changeMenuItems = function(btnlist){
 	Pampa.clearMenu();
 
 	// Creamos una lista para guardar los callbacks y bindear al final
-	callbacks = {}
+	var callbacks = {}
+
+	// Si el primer elemento tiene como nombre 'BACK' se utiliza para
+	// definir el boton atras
+	if (btnlist[0].name == 'BACK'){
+		Pampa.menuElement.innerHTML = $('#back-button-html').html();
+		$('.menu .back-button').attr('id', 'back-button');
+		callbacks['back-button'] = btnlist[0].callback;
+		btnlist.splice(0,1);
+	}
 
 	// Por cada elemento nuevo de la lista, hacemos un render de 
 	// la plantilla de Mustache, de elemento del menu
@@ -259,6 +274,18 @@ Pampa.changeMenu = function(btnlist){
 		Pampa.changeMenuItems(btnlist);
 	});
 	m.animate({left: 0, opacity: 1}, {duration: 100, queue: true});
+}
+
+
+// Funciones para ocultar y mostrar el menu
+Pampa.hideMenu = function(){
+	m = $('.menu');
+	m.animate({left: m.width(), opacity: 0}, 100);
+}
+
+Pampa.showMenu = function(){
+	m = $('.menu');
+	m.animate({left: 0, opacity: 1}, 100);
 }
 
 

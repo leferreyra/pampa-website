@@ -92,6 +92,30 @@ body {
 		} 
 	}
 
+	#back-button {
+		padding: 5px 20px;
+		color: gray;
+		font-family: Arial;
+		font-size: 18px;
+		font-weight: normal;
+		text-transform: uppercase;
+		font-style: italic;
+		float:left;
+		cursor: pointer;
+		text-shadow: 0px 1px 2px black;
+		background-color: rgba(0,0,0,0.6);
+		margin-right: 80px;
+		margin-bottom: 20px;
+
+		transition-property: color, background-color;
+		transition-duration: 0.3s, 0.4s;
+		transition-timing-function: ease-in-out;
+		&:hover {
+			color: @rojo;
+			background: rgba(0,0,0,0.4);
+		}
+	}
+
 	.button {
 
 		animation-name: bounce-in;
