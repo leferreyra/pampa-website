@@ -161,12 +161,6 @@ Pampa.on_load_complete = function(){
 Pampa.menuItems = [
 	{ 
 		id: '',
-		name: 'BACK',
-		link: '#!/',
-		callback: function(){ console.log('back up!'); }
-	},
-	{ 
-		id: '',
 		name: 'Colección',
 		link: '#!/collection',
 		callback: function(){ console.log('Se ha presionado el boton, coleccion'); }
