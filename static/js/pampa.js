@@ -10,6 +10,9 @@ $(document).ready(function(){
 	Pampa.changeMenuItems(Pampa.menuItems);
 	Pampa.setTopMenuDelays();
 
+	// Definimos el elemento loading
+	Pampa.loadingElement = $('#loading');
+
 	// Comenzar la carga
 	setTimeout(Pampa.load, 4000);
 
@@ -136,6 +139,15 @@ Pampa.on_load_complete = function(){
 	// Ocultamos el div de loading (Provisorio)
 	$('#loading').addClass('hide');
 
+	// Cambiamos algunas propiedades del elmento para utilizarlo como preloader
+	// de las subsecciones tambien (Despues de que terminan las animaciones CSS)
+	setTimeout(function(){
+		$('#loading').css({
+			background: 'rgba(0,0,0,0.6)',
+			zIndex: 60
+		});
+	}, 1000);
+
 	// Mostramos el menu (Provisorio)
 	$('.menu').addClass('show');
 
@@ -247,4 +259,20 @@ Pampa.changeMenu = function(btnlist){
 		Pampa.changeMenuItems(btnlist);
 	});
 	m.animate({left: 0, opacity: 1}, {duration: 100, queue: true});
+}
+
+
+// Funciones para el control del div loading
+// =========================================
+
+// Esta funcion muestra el div loading (no!, en serio?)
+Pampa.showLoading = function(){
+	l = Pampa.loadingElement;
+	l.removeClass('hide');
+}
+
+// Esta funcion esconde el div loading
+Pampa.hideLoading = function(){
+	l = Pampa.loadingElement;
+	l.addClass('hide');
 }
