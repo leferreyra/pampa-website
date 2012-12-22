@@ -14,11 +14,21 @@
         <link rel="stylesheet/less" type="text/css" href="{{ STATIC_URL }}css/main.less">
         <link rel="shortcut icon" href="{{ STATIC_URL }}img/fav.png" type="ico/png">
 
+        <!-- Estilos para el plugin 360-player -->
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}360-player/360player.css">
+
         <script type="text/javascript" src='{{ STATIC_URL }}js/prefixfree.js'></script>
         <script type="text/javascript" src='{{ STATIC_URL }}js/less.js'></script>
         <script type="text/javascript" src='{{ STATIC_URL }}js/jquery.js'></script>
         <script type="text/javascript" src='{{ STATIC_URL }}js/mustache.js'></script>
         <script type="text/javascript" src='{{ STATIC_URL }}js/pampa.js'></script>
+
+        <!-- Librerias para el reproductor de musica -->
+        <script type="text/javascript" src='{{ STATIC_URL }}360-player/script/berniecode-animator.js'></script>
+        <script type="text/javascript" src='{{ STATIC_URL }}js/soundmanager2.js'></script>
+
+        <script type="text/javascript" src='{{ STATIC_URL }}360-player/script/excanvas.js'></script>
+        <script type="text/javascript" src='{{ STATIC_URL }}360-player/script/360player.js'></script>
 
 </head>
     <body>
@@ -54,6 +64,11 @@
         <!-- Este div contiene el logo del sitio y el fondo principal -->
         <div id="wrapper">
             <img class='logo' data-src='{{ STATIC_URL }}img/pampa-logo.png'>
+            <div id="music-player">
+                <div class='ui360'>
+                    <a href='{{ STATIC_URL }}mp3/soundtrack.mp3'></a>
+                </div>
+            </div>
         </div>
 
 

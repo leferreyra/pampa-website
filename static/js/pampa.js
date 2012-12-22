@@ -135,6 +135,8 @@ Pampa.check_loading_state = function(){
 Pampa.on_load_complete = function(){
 
 	console.log('Carga completa');
+	// Comenzamos a cargar y reproducir la musica
+	Pampa.setUpMusic()
 
 	// Ocultamos el div de loading (Provisorio)
 	$('#loading').addClass('hide');
@@ -296,4 +298,72 @@ Pampa.showLoading = function(){
 Pampa.hideLoading = function(){
 	l = Pampa.loadingElement;
 	l.addClass('hide');
+}
+
+
+// Configuraciones para el reproductor de musica
+// =============================================
+
+Pampa.setUpMusic = function(){
+
+	// Setup de la libreria soundmanager2.json
+	soundManager.setup({
+	  // path to directory containing SM2 SWF
+	  url: 'static/swf/',
+	});
+
+
+	// Setup del plugin 360
+	threeSixtyPlayer.config = {
+
+	    playNext: true,   // stop after one sound, or play through list until end
+	    autoPlay: true,   // start playing the first sound right away
+	    allowMultiple: false,  // let many sounds play at once (false = only one sound playing at a time)
+	    loadRingColor: '#333', // how much has loaded
+	    playRingColor: '#d40000', // how much has played
+	    backgroundRingColor: '#333', // color shown underneath load + play ("not yet loaded" color)
+
+	    // optional segment/annotation (metadata) stuff..
+	    segmentRingColor: 'rgba(255,255,255,0.33)', // metadata/annotation (segment) colors
+	    segmentRingColorAlt: 'rgba(0,0,0,0.1)',
+	    loadRingColorMetadata: '#ddd', // "annotations" load color
+	    playRingColorMetadata: 'rgba(128,192,256,0.9)', // how much has played when metadata is present
+
+	    circleDiameter: null, // set dynamically according to values from CSS
+	    circleRadius: null,
+	    animDuration: 500,
+	    animTransition: window.Animator.tx.bouncy, // http://www.berniecode.com/writing/animator.html
+	    showHMSTime: false, // hours:minutes:seconds vs. seconds-only
+	    scaleFont: true,  // also set the font size (if possible) while animating the circle
+
+	    // optional: spectrum or EQ graph in canvas (not supported in IE <9, too slow via ExCanvas)
+	    useWaveformData: false,
+	    waveformDataColor: '#0099ff',
+	    waveformDataDownsample: 3, // use only one in X (of a set of 256 values) - 1 means all 256
+	    waveformDataOutside: false,
+	    waveformDataConstrain: false, // if true, +ve values only - keep within inside circle
+	    waveformDataLineRatio: 0.64,
+
+	    // "spectrum frequency" option
+	    useEQData: false,
+	    eqDataColor: '#339933',
+	    eqDataDownsample: 4, // use only one in X (of 256 values)
+	    eqDataOutside: true,
+	    eqDataLineRatio: 0.54,
+
+	    // enable "amplifier" (canvas pulses like a speaker) effect
+	    usePeakData: true,
+	    peakDataColor: '#ff33ff',
+	    peakDataOutside: true,
+	    peakDataLineRatio: 0.5,
+
+	    useAmplifier: true, // "pulse" like a speaker
+
+	    fontSizeMax: null, // set according to CSS
+
+	    scaleArcWidth: 1,  // thickness factor of playback progress ring
+
+	    useFavIcon: false // Experimental (also requires usePeakData: true).. Try to draw a "VU Meter" in the favicon area, if browser supports it (Firefox + Opera as of 2009)
+		
+	}
 }
