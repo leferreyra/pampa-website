@@ -1,8 +1,11 @@
 
 // Archivo principal que contiene toda la logica del sitio web
 
+
+// Definimos el espacio de nombres de la app
 var Pampa = {}
 
+// Disparamos todo cuando el DOM esta cargado
 $(document).ready(function(){
 
 	// Cargamos el menu con los botones iniciales
@@ -21,8 +24,7 @@ $(document).ready(function(){
 
 // Diccionario que contiene el estado de carga de cada recurso
 Pampa.resources_loading_state = {
-	// 'fonts': false,
-	// 'music': false,
+	'fonts': false,
 	'images': false,
 	'background': false,
 }
@@ -32,6 +34,7 @@ Pampa.load = function(){
 	// Comenzar la carga por recursos
 	Pampa.load_images();
 	Pampa.load_background();
+	Pampa.load_font();
 
 }
 
@@ -81,6 +84,47 @@ Pampa.check_images_loaded = function(){
 		Pampa.resources_loading_state['images'] = true;
 		Pampa.check_loading_state();
 	}
+}
+
+
+// Cargamos las fuentes, usando Google WebfontLoader
+Pampa.load_font = function(){
+
+	// Configuracion de Webfont Loader
+	var WebFontConfig = {
+		custom: {
+			families: ['dinpro'],
+			urls: [ 'static/css/fonts.css' ]
+		},
+		active: function(){
+
+			// Marcamos el recurso de fuentes como cargado.
+			Pampa.resources_loading_state['fonts'] = true;
+
+			// Checkeamos el estado de todos los recursos.
+			Pampa.check_loading_state();
+		},
+		inactive: function(){
+
+			// Debug output
+			console.log('Fuentes inactivas...');
+			console.log('Intentando nuevamente...');
+
+			// Intentar cargar las fuentes nuevamente
+			WebFont.load(WebFontConfig);
+		},
+		loading: function(){
+			console.log('Cargando fuentes...');
+		},
+	}
+
+	if (WebFont){
+
+		// Comenzar la carga de fuentes
+		WebFont.load(WebFontConfig);
+
+	}
+
 }
 
 
@@ -363,7 +407,8 @@ Pampa.setUpMusic = function(){
 
 	    scaleArcWidth: 1,  // thickness factor of playback progress ring
 
-	    useFavIcon: false // Experimental (also requires usePeakData: true).. Try to draw a "VU Meter" in the favicon area, if browser supports it (Firefox + Opera as of 2009)
+	    useFavIcon: false // Experimental (also requires usePeakData: true).. 
+	    //Try to draw a "VU Meter" in the favicon area, if browser supports it (Firefox + Opera as of 2009)
 		
 	}
 }
