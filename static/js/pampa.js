@@ -1,7 +1,6 @@
 
 // Archivo principal que contiene toda la logica del sitio web
 
-
 // Definimos el espacio de nombres de la app
 var Pampa = {}
 
@@ -197,6 +196,9 @@ Pampa.on_load_complete = function(){
 	// Mostramos el menu (Provisorio)
 	$('.menu').addClass('show');
 
+	// Mostramos el div wrapper
+	$('#wrapper').show()
+
 }
 
 
@@ -365,7 +367,7 @@ Pampa.setUpMusic = function(){
 	    allowMultiple: false,  // let many sounds play at once (false = only one sound playing at a time)
 	    loadRingColor: '#333', // how much has loaded
 	    playRingColor: '#d40000', // how much has played
-	    backgroundRingColor: '#333', // color shown underneath load + play ("not yet loaded" color)
+	    backgroundRingColor: '#1a1a1a', // color shown underneath load + play ("not yet loaded" color)
 
 	    // optional segment/annotation (metadata) stuff..
 	    segmentRingColor: 'rgba(255,255,255,0.33)', // metadata/annotation (segment) colors

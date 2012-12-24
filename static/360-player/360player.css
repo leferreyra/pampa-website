@@ -34,7 +34,7 @@
 .sm2-360ui.sm2_playing,
 .sm2-360ui.sm2_paused {
  /* bump on top when active */
- z-index:310;
+ z-index:160;
 }
 
 .ui360 a { /* .sm2_link class added to playable links by SM2 */
@@ -97,7 +97,7 @@
  top:0px;
  width:100%;
  height:100%;
- z-index:302;
+ z-index:152;
  display:none;
  background-image: url(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==); /* old-skool bug: IE 9 won't catch mouse events otherwise. /smash */
 }
@@ -120,7 +120,7 @@
  margin-top:-25px;
  border-radius: 25px;
  cursor:pointer;
- z-index:303;
+ z-index:153;
 }
 
 .ui360 .sm2-360data {
