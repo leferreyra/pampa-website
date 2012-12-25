@@ -1,10 +1,12 @@
 from website.models import *
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.core import serializers
 from django.utils import simplejson
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from json import dumps
+
 
 
 
@@ -60,3 +62,19 @@ def fondos(request):
 
     fondos = serializers.serialize('json', Fondo.objects.all().order_by('id').reverse()[:1]) 
     return HttpResponse(simplejson.dumps(fondos), mimetype='application/json')
+
+def contacto(request):
+	subject = 'Nuevo mensaje de: %s' % request.POST['nombre']
+	body = 'Mensaje: %s' % request.POST['mensaje']
+
+	#se debe definir el mail from y los mails a los que va a recibir. 
+	send_mail(subject, body, 'francoescobar8@hotmail.com', ['franco_m77@hotmail.com'])
+	
+	#A donde redirecciono luego de enviar el mail? 
+	return HttpResponseRedirect('/')
+
+def suscriptor(request):
+	e = Suscriptor(email= request.POST['email'])
+	e.save()
+
+	return HttpResponseRedirect('/')

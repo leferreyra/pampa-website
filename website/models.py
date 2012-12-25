@@ -48,7 +48,7 @@ class Fondo(models.Model):
         return self.nombre
 
 
-class suscriptor(models.Model):
+class Suscriptor(models.Model):
     
     email= models.CharField(max_length=100)
 
