@@ -1,8 +1,10 @@
 
 // Archivo principal que contiene toda la logica del sitio web
 
+// Definimos el espacio de nombres de la app
 var Pampa = {}
 
+// Disparamos todo cuando el DOM esta cargado
 $(document).ready(function(){
 
 	// Cargamos el menu con los botones iniciales
@@ -10,16 +12,18 @@ $(document).ready(function(){
 	Pampa.changeMenuItems(Pampa.menuItems);
 	Pampa.setTopMenuDelays();
 
+	// Definimos el elemento loading
+	Pampa.loadingElement = $('#loading');
+
 	// Comenzar la carga
-	setTimeout(Pampa.load, 4000);
+	Pampa.load();
 
 });
 
 
 // Diccionario que contiene el estado de carga de cada recurso
 Pampa.resources_loading_state = {
-	// 'fonts': false,
-	// 'music': false,
+	'fonts': false,
 	'images': false,
 	'background': false,
 }
@@ -29,6 +33,7 @@ Pampa.load = function(){
 	// Comenzar la carga por recursos
 	Pampa.load_images();
 	Pampa.load_background();
+	Pampa.load_font();
 
 }
 
@@ -78,6 +83,47 @@ Pampa.check_images_loaded = function(){
 		Pampa.resources_loading_state['images'] = true;
 		Pampa.check_loading_state();
 	}
+}
+
+
+// Cargamos las fuentes, usando Google WebfontLoader
+Pampa.load_font = function(){
+
+	// Configuracion de Webfont Loader
+	var WebFontConfig = {
+		custom: {
+			families: ['dinpro'],
+			urls: [ 'static/css/fonts.css' ]
+		},
+		active: function(){
+
+			// Marcamos el recurso de fuentes como cargado.
+			Pampa.resources_loading_state['fonts'] = true;
+
+			// Checkeamos el estado de todos los recursos.
+			Pampa.check_loading_state();
+		},
+		inactive: function(){
+
+			// Debug output
+			console.log('Fuentes inactivas...');
+			console.log('Intentando nuevamente...');
+
+			// Intentar cargar las fuentes nuevamente
+			WebFont.load(WebFontConfig);
+		},
+		loading: function(){
+			console.log('Cargando fuentes...');
+		},
+	}
+
+	if (WebFont){
+
+		// Comenzar la carga de fuentes
+		WebFont.load(WebFontConfig);
+
+	}
+
 }
 
 
@@ -132,12 +178,26 @@ Pampa.check_loading_state = function(){
 Pampa.on_load_complete = function(){
 
 	console.log('Carga completa');
+	// Comenzamos a cargar y reproducir la musica
+	Pampa.setUpMusic()
 
 	// Ocultamos el div de loading (Provisorio)
 	$('#loading').addClass('hide');
 
+	// Cambiamos algunas propiedades del elmento para utilizarlo como preloader
+	// de las subsecciones tambien (Despues de que terminan las animaciones CSS)
+	setTimeout(function(){
+		$('#loading').css({
+			background: 'rgba(0,0,0,0.6)',
+			zIndex: 60
+		});
+	}, 1000);
+
 	// Mostramos el menu (Provisorio)
 	$('.menu').addClass('show');
+
+	// Mostramos el div wrapper
+	$('#wrapper').show()
 
 }
 
@@ -193,7 +253,16 @@ Pampa.changeMenuItems = function(btnlist){
 	Pampa.clearMenu();
 
 	// Creamos una lista para guardar los callbacks y bindear al final
-	callbacks = {}
+	var callbacks = {}
+
+	// Si el primer elemento tiene como nombre 'BACK' se utiliza para
+	// definir el boton atras
+	if (btnlist[0].name == 'BACK'){
+		Pampa.menuElement.innerHTML = $('#back-button-html').html();
+		$('.menu .back-button').attr('id', 'back-button');
+		callbacks['back-button'] = btnlist[0].callback;
+		btnlist.splice(0,1);
+	}
 
 	// Por cada elemento nuevo de la lista, hacemos un render de 
 	// la plantilla de Mustache, de elemento del menu
@@ -247,4 +316,101 @@ Pampa.changeMenu = function(btnlist){
 		Pampa.changeMenuItems(btnlist);
 	});
 	m.animate({left: 0, opacity: 1}, {duration: 100, queue: true});
+}
+
+
+// Funciones para ocultar y mostrar el menu
+Pampa.hideMenu = function(){
+	m = $('.menu');
+	m.animate({left: m.width(), opacity: 0}, 100);
+}
+
+Pampa.showMenu = function(){
+	m = $('.menu');
+	m.animate({left: 0, opacity: 1}, 100);
+}
+
+
+// Funciones para el control del div loading
+// =========================================
+
+// Esta funcion muestra el div loading (no!, en serio?)
+Pampa.showLoading = function(){
+	l = Pampa.loadingElement;
+	l.removeClass('hide');
+}
+
+// Esta funcion esconde el div loading
+Pampa.hideLoading = function(){
+	l = Pampa.loadingElement;
+	l.addClass('hide');
+}
+
+
+// Configuraciones para el reproductor de musica
+// =============================================
+
+Pampa.setUpMusic = function(){
+
+	// Setup de la libreria soundmanager2.json
+	soundManager.setup({
+	  // path to directory containing SM2 SWF
+	  url: 'static/swf/',
+	});
+
+
+	// Setup del plugin 360
+	threeSixtyPlayer.config = {
+
+	    playNext: true,   // stop after one sound, or play through list until end
+	    autoPlay: true,   // start playing the first sound right away
+	    allowMultiple: false,  // let many sounds play at once (false = only one sound playing at a time)
+	    loadRingColor: '#333', // how much has loaded
+	    playRingColor: '#d40000', // how much has played
+	    backgroundRingColor: '#1a1a1a', // color shown underneath load + play ("not yet loaded" color)
+
+	    // optional segment/annotation (metadata) stuff..
+	    segmentRingColor: 'rgba(255,255,255,0.33)', // metadata/annotation (segment) colors
+	    segmentRingColorAlt: 'rgba(0,0,0,0.1)',
+	    loadRingColorMetadata: '#ddd', // "annotations" load color
+	    playRingColorMetadata: 'rgba(128,192,256,0.9)', // how much has played when metadata is present
+
+	    circleDiameter: null, // set dynamically according to values from CSS
+	    circleRadius: null,
+	    animDuration: 500,
+	    animTransition: window.Animator.tx.bouncy, // http://www.berniecode.com/writing/animator.html
+	    showHMSTime: false, // hours:minutes:seconds vs. seconds-only
+	    scaleFont: true,  // also set the font size (if possible) while animating the circle
+
+	    // optional: spectrum or EQ graph in canvas (not supported in IE <9, too slow via ExCanvas)
+	    useWaveformData: false,
+	    waveformDataColor: '#0099ff',
+	    waveformDataDownsample: 3, // use only one in X (of a set of 256 values) - 1 means all 256
+	    waveformDataOutside: false,
+	    waveformDataConstrain: false, // if true, +ve values only - keep within inside circle
+	    waveformDataLineRatio: 0.64,
+
+	    // "spectrum frequency" option
+	    useEQData: false,
+	    eqDataColor: '#339933',
+	    eqDataDownsample: 4, // use only one in X (of 256 values)
+	    eqDataOutside: true,
+	    eqDataLineRatio: 0.54,
+
+	    // enable "amplifier" (canvas pulses like a speaker) effect
+	    usePeakData: true,
+	    peakDataColor: '#ff33ff',
+	    peakDataOutside: true,
+	    peakDataLineRatio: 0.5,
+
+	    useAmplifier: true, // "pulse" like a speaker
+
+	    fontSizeMax: null, // set according to CSS
+
+	    scaleArcWidth: 1,  // thickness factor of playback progress ring
+
+	    useFavIcon: false // Experimental (also requires usePeakData: true).. 
+	    //Try to draw a "VU Meter" in the favicon area, if browser supports it (Firefox + Opera as of 2009)
+		
+	}
 }

@@ -1,0 +1,10 @@
+
+/*
+Import fonts
+Ver compatibilidad de navegadores
+*/
+
+@font-face {
+	font-family: dinpro;
+	src: url('../fonts/DINPro-Bold.ttf');
+}
