@@ -80,6 +80,57 @@ body {
 	display: none;
 }
 
+// Secciones 
+
+.section {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background: gray;
+	top: 0;
+	left: 0;
+}
+
+#campaign {	
+	.backsled {
+		position:absolute;
+		width: 100%;
+		height: 100%;
+		background: black;
+		top:0px;
+
+		.campaign-item {
+			width: 100%;
+			height: 100%;
+			background-size: cover;
+		}
+	}
+	.next {
+		position: absolute;
+		right: 0px;
+		transform: rotate(180deg);
+	}
+	.b {
+		transition: opacity 0.3s ease-in-out;
+		opacity: 0.1;
+		cursor: pointer;
+		width: 300px;
+		height: 100%;
+		background-image: url('../img/left-arrow.png');
+		background-position: 30px center;
+		background-repeat: no-repeat;
+		z-index: 100;
+		position:absolute;
+
+		&:hover {
+			opacity: 0.8;
+		}
+	}
+	display: none;
+}
+
+
+
 #red-line {
 	position: fixed;
 	top:0px;
