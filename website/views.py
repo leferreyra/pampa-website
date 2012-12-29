@@ -8,13 +8,9 @@ from django.shortcuts import render_to_response
 from json import dumps
 
 
-
-
-
 def index(request):
 
 	return render_to_response('index.html', {}, context_instance = RequestContext(request))
-
 
 
 def secciones(request):
@@ -40,7 +36,6 @@ def productos(request, id_seccion):
 				'imagen_2': '',
 				'miniatura_1': producto.imagen_1.url_200x200,
 				'miniatura_2': '',
-				
 			}
 
 		if producto.imagen_2: 
@@ -67,14 +62,24 @@ def contacto(request):
 	subject = 'Nuevo mensaje de: %s' % request.POST['nombre']
 	body = 'Mensaje: %s' % request.POST['mensaje']
 
-	#se debe definir el mail from y los mails a los que va a recibir. 
-	send_mail(subject, body, 'francoescobar8@hotmail.com', ['franco_m77@hotmail.com'])
+	# obetener el email del administrador
+	admin_user = User.objects.get(username='admin')
+
+
+	# envia desde una direccion del sistema no-reply al administrador del sitio django
+	send_mail(subject, body, 'francoescobar8@hotmail.com', [ admin.email ])
 	
-	#A donde redirecciono luego de enviar el mail? 
+	# a donde redirecciono luego de enviar el mail? 
 	return HttpResponseRedirect('/')
 
 def suscriptor(request):
+
 	e = Suscriptor(email= request.POST['email'])
 	e.save()
 
-	return HttpResponseRedirect('/')
+	# devolvemos el status del la consulta
+	response = {
+		'status':'OK'
+	}
+
+    return HttpResponse(dumps(response), mimetype='application/json')
