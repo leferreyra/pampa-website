@@ -1,4 +1,5 @@
 from website.models import *
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.core import serializers
@@ -24,8 +25,6 @@ def productos(request, id_seccion):
 	produc = Producto.objects.filter(secciones= id_seccion)
 	productos= []
 	
-	
-
 	for producto in produc:
 
 		newobj = {
@@ -58,6 +57,7 @@ def fondos(request):
     fondos = serializers.serialize('json', Fondo.objects.all().order_by('id').reverse()[:1]) 
     return HttpResponse(simplejson.dumps(fondos), mimetype='application/json')
 
+
 def contacto(request):
 	subject = 'Nuevo mensaje de: %s' % request.POST['nombre']
 	body = 'Mensaje: %s' % request.POST['mensaje']
@@ -65,12 +65,16 @@ def contacto(request):
 	# obetener el email del administrador
 	admin_user = User.objects.get(username='admin')
 
-
 	# envia desde una direccion del sistema no-reply al administrador del sitio django
-	send_mail(subject, body, 'francoescobar8@hotmail.com', [ admin.email ])
+	send_mail(subject, body, 'no-reply@pampamoda.com.ar', [ admin.email ])
+
+	# devolvemos el status del la consulta
+	response = {
+		'status':'OK'
+	}
+
+    return HttpResponse(dumps(response), mimetype='application/json')
 	
-	# a donde redirecciono luego de enviar el mail? 
-	return HttpResponseRedirect('/')
 
 def suscriptor(request):
 
@@ -81,5 +85,5 @@ def suscriptor(request):
 	response = {
 		'status':'OK'
 	}
-
+	
     return HttpResponse(dumps(response), mimetype='application/json')
