@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^campaign/', "website.views.campania"),
     url(r'^background/', "website.views.fondos"),
     url(r'^contacto/', "website.views.contacto"),
+    url(r'^subscribe/', "website.views.suscriptor"),
 )
 
 

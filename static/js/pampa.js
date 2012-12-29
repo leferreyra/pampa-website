@@ -12,6 +12,9 @@ $(document).ready(function(){
 	Pampa.changeMenuItems(Pampa.menuItems);
 	Pampa.setTopMenuDelays();
 
+	// Bind subscribe events
+	Pampa.bindSubscribeEvent();
+
 	// Definimos el elemento loading
 	Pampa.loadingElement = $('#loading');
 
@@ -413,4 +416,59 @@ Pampa.setUpMusic = function(){
 	    //Try to draw a "VU Meter" in the favicon area, if browser supports it (Firefox + Opera as of 2009)
 		
 	}
+}
+
+
+// Bindeamos el evento onkeypress para el apartado subscribir
+// ----------------------------------------------------------
+
+
+Pampa.bindSubscribeEvent = function(){
+
+	// Creamos el listener del evento onkeypress
+	$('#subscribe input').keypress(function(e){
+
+		// Verificamos que sea la tecla enter
+		if (e.which == 13){
+
+			// Obtenemos el contenido del input
+			email = $('#subscribe input').val();
+
+			// Comprobamos que sea un email valido (mas o menos)
+			if (email.indexOf('@')!=-1 && email.indexOf('.')!=-1){
+
+				// Creamos el map de datos a enviar
+				data = {
+					'email': email
+				}
+
+				// Ponemos el apartado en modo 'cargando'
+				$('#subscribe').addClass('loading');
+
+				// Realizamos la consulta
+				$.get('/subscribe/', data, function(json){
+
+					if (json.status == 'OK'){
+
+						// Sacamos el modo cargando
+						$('#subscribe').removeClass('loading');
+
+						// Escondemos el input
+						$('#subscribe input').hide();
+
+						// Cambiamos mensaje y color del parrafo
+						$('#subscribe p')
+							.html('Tu correo fue guardado exitosamente!')
+
+						// Esperamos unos segundos y luego escondemos el form.
+						setTimeout(function(){
+							$('#subscribe').fadeOut();
+						}, 5000);
+					}
+				});
+
+			// Emitimos mensaje de error de validacion
+			}else{ alert('El e-mail introducido debe ser una direccion válida de correo'); }
+		}
+	});
 }
