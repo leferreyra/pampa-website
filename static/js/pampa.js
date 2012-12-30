@@ -235,7 +235,7 @@ Pampa.menuItems = [
 		id: '/contact',
 		name: 'Contacto',
 		link: '#/contact',
-		callback: function(){$.History.go('/contacto'); console.log('contacto?, todo lo que tu quieras mami..'); }
+		callback: function(){$.History.go('/contacto');}
 	},
 ];
 

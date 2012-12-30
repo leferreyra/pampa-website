@@ -47,28 +47,66 @@ var go_to = {
 }
 
 
+// Definir solo boton atras al menu principal
+back_btn = {
+	id:'',
+	link:'/',
+	name:'BACK',
+	callback: function(){
+
+		// Volvemos al menu principal
+		$.History.go('');
+	}
+}
+
+
 $(function() {
+
 	$.History.bind('/coleccion',function(state) {
 		go_to[state]();
 	});
+
 	$.History.bind('/campania',function(state) {
 		console.log(state);
 	});
+
 	$.History.bind('/contacto',function(state) {
-		console.log(state);
+
+		// Creamos nueva lista de botones para el menu
+		newmenu = [back_btn];
+
+		// Cambiamos los botones del menu
+		Pampa.changeMenu(newmenu);
+
+		// Mostramos el div dela seccion contacto
+		$('#content #contact').show();
+		$('#content').show();
+
 	});
+
 	$.History.bind('/tienda',function(state) {
 		console.log(state);
 	});
+
 	$.History.bind('',function() {
-		// Pampa.loadMainMenu();
+
+		// Ocultar los divs de cualquier otra seccion
+		$('#content').hide();
+		$('#content > div').hide();
+
+		// Cambiamos el menu con los items princimpales
+		Pampa.changeMenu(Pampa.menuItems);
 	});
+
 	bindearSeccion = function(id) {
 		$.History.bind('/coleccion/seccion/' + id,function() {
+
 			go_to['/coleccion/seccion/'](id);
 		})
 	};
+
 	var hash = location.hash;
+
 	if (hash.substring(1,20) == '/coleccion/seccion/') {
 		//se llama al array donde se encuentran las funciones, en este caso es la funcion
 		// de carga de secciones, se le pasa la seccion que se desea cargar, la que se encuentra
