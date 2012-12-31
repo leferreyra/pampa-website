@@ -15,6 +15,9 @@ $(document).ready(function(){
 	// Bind subscribe events
 	Pampa.bindSubscribeEvent();
 
+	// Bind contact form
+	Pampa.bindContactForm();
+
 	// Definimos el elemento loading
 	Pampa.loadingElement = $('#loading');
 
@@ -435,7 +438,7 @@ Pampa.bindSubscribeEvent = function(){
 			email = $('#subscribe input').val();
 
 			// Comprobamos que sea un email valido (mas o menos)
-			if (email.indexOf('@')!=-1 && email.indexOf('.')!=-1){
+			if (Pampa.isMail(email)){
 
 				// Creamos el map de datos a enviar
 				data = {
@@ -471,4 +474,51 @@ Pampa.bindSubscribeEvent = function(){
 			}else{ alert('El e-mail introducido debe ser una direccion válida de correo'); }
 		}
 	});
+}
+
+
+// Listeners que envian el formulario de contacto
+// ----------------------------------------------
+
+Pampa.bindContactForm = function(){
+
+	// Bindeamos el boton de submit
+	$('#submit-contact').click(function(){
+
+		// Obtenemos las entradas
+		nombre = $('.contacto-box input[name="nombre"]').val();
+		mail = $('.contacto-box input[name="mail"]').val();
+		mensaje = $('.contacto-box textarea').val();
+
+		// Si el formulario es valido, hacemos la consulta
+		if (nombre!='' && Pampa.isMail(mail) && mensaje!=''){
+
+			// Cambiamos el estado del formulario
+			$('.contacto-box').addClass('loading');
+			$('#submit-contact').html('Cargando...');
+
+
+			// Creamos el mapa de datos a enviar
+			data = {
+				'nombre' : nombre,
+				'mail' : mail,
+				'mensaje' : mensaje
+			}
+			
+			// Realizamos la consulta
+			$.get('contacto/', data, function(json){
+				response = $.parseJSON(json);
+				console.log(response);
+
+				// Cambiamos el estado del formulario
+				$('.contacto-box').removeClass('loading');
+			})
+		}
+	});
+}
+
+
+// Validar email ;)
+Pampa.isMail = function(mail){
+	return mail.indexOf('@')!=-1 && mail.indexOf('.')!=-1
 }
