@@ -6,6 +6,3 @@ admin.site.register(Seccion)
 admin.site.register(Campania)
 admin.site.register(Fondo)
 admin.site.register(Suscriptor)
-
-
-
