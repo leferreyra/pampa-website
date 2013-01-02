@@ -17,7 +17,7 @@ body {
 	height: 100%;
 
 	transition-property: background-color, top;
-	transition-duration: 0.3s, 0.5s;
+	transition-duration: 0.3s, 0.3s;
 	transition-delay: 0, 0.3s;
 	transition-timing-function: ease-in-out, ease-in-out;
 	img {
@@ -95,13 +95,12 @@ body {
 		position:absolute;
 		width: 100%;
 		height: 100%;
-		background: black;
 		top:0px;
 
 		.campaign-item {
-			width: 100%;
 			height: 100%;
 			background-size: cover;
+			float:left;
 		}
 	}
 	.next {
@@ -113,16 +112,20 @@ body {
 		transition: opacity 0.3s ease-in-out;
 		opacity: 0.1;
 		cursor: pointer;
-		width: 300px;
+		width: 40%;
 		height: 100%;
 		background-image: url('../img/left-arrow.png');
-		background-position: 30px center;
+		background-position: 50px center;
 		background-repeat: no-repeat;
 		z-index: 100;
 		position:absolute;
+		transition: all 0.2s ease-in-out;
+		display: none;
 
 		&:hover {
 			opacity: 0.8;
+			background-position: 30px center;
+			background-color: rgba(0,0,0,0.1);
 		}
 	}
 	display: none;
@@ -130,6 +133,7 @@ body {
 
 #contact {
 	background: rgba(0,0,0,0.5);
+	display: none;
 	.contacto-box {
 		width: 700px;
 		position: absolute;
