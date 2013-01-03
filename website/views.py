@@ -61,8 +61,10 @@ def fondos(request):
 
 @csrf_exempt
 def contacto(request):
+    
     subject = 'Nuevo mensaje de: %s' % request.GET['nombre']
-    body = 'Mensaje: %s' % request.POST['mensaje']
+    body = 'E-mail: %s\n' % request.GET['mail']
+    body += 'Mensaje: %s' % request.GET['mensaje']
 
     # obetener el email del administrador
     admin_user = User.objects.get(username='admin')
