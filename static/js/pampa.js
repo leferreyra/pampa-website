@@ -62,7 +62,7 @@ Pampa.load_images = function(){
 	$.each(image_list, function(index, img){
 		img.onload = function(){
 
-			// console.log('Cargada la imagen '+img.getAttribute('data-src'));
+			// // console.log('Cargada la imagen '+img.getAttribute('data-src'));
 
 			// Cuando el evento onload se produce, se llama a la funcion check_images_loaded
 			Pampa.check_images_loaded();
@@ -85,7 +85,7 @@ Pampa.check_images_loaded = function(){
 	// el estado de carga de las imagenes, y se llama al callback que controla los
 	// estados de carga de los recursos.
 	if (Pampa.loaded_img_count == Pampa.img_count){
-		// console.log('Todas las imagenes cargadas');
+		// // console.log('Todas las imagenes cargadas');
 		Pampa.resources_loading_state['images'] = true;
 		Pampa.check_loading_state();
 	}
@@ -112,14 +112,14 @@ Pampa.load_font = function(){
 		inactive: function(){
 
 			// Debug output
-			console.log('Fuentes inactivas...');
-			console.log('Intentando nuevamente...');
+			// console.log('Fuentes inactivas...');
+			// console.log('Intentando nuevamente...');
 
 			// Intentar cargar las fuentes nuevamente
 			WebFont.load(WebFontConfig);
 		},
 		loading: function(){
-			console.log('Cargando fuentes...');
+			// console.log('Cargando fuentes...');
 		},
 	}
 
@@ -183,7 +183,7 @@ Pampa.check_loading_state = function(){
 // Funcion llamada cuando todos los recursos han sido cargados
 Pampa.on_load_complete = function(){
 
-	console.log('Carga completa');
+	// console.log('Carga completa');
 	// Comenzamos a cargar y reproducir la musica
 	Pampa.setUpMusic()
 
@@ -217,7 +217,7 @@ Pampa.menuItems = [
 		id: '/coleccion',
 		name: 'Colección',
 		link: '#/collection',
-		callback: function(){ $.History.go('/coleccion'); console.log('Se ha presionado el boton, coleccion'); }
+		callback: function(){ $.History.go('/coleccion'); // console.log('Se ha presionado el boton, coleccion'); }
 	},
 
 	{ 
@@ -508,7 +508,7 @@ Pampa.bindContactForm = function(){
 			// Realizamos la consulta
 			$.get('contacto/', data, function(json){
 				response = $.parseJSON(json);
-				console.log(response);
+				// console.log(response);
 
 				// Cambiamos el estado del formulario
 				$('.contacto-box').removeClass('loading');
