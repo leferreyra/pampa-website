@@ -217,7 +217,7 @@ Pampa.menuItems = [
 		id: '/coleccion',
 		name: 'Colección',
 		link: '#/collection',
-		callback: function(){ $.History.go('/coleccion'); // console.log('Se ha presionado el boton, coleccion'); }
+		callback: function(){ $.History.go('/coleccion'); }
 	},
 
 	{ 

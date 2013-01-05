@@ -1,4 +1,7 @@
 
+var test_scale;
+var go_section;
+
 // Definir solo boton atras al menu principal
 back_btn = {
 	id:'',
@@ -8,6 +11,24 @@ back_btn = {
 
 		// Volvemos al menu principal
 		$.History.go('');
+	}
+}
+
+// Definimos funcion para parsear el hash de la url, cada vez
+// que cambia. Asi cuando cambia a una seccion en particular
+// podemos extraer la id de dicha seccion
+window.onhashchange = function(){
+
+	// Obtener hash
+	hash = window.location.hash;
+	dirs = hash.split('/');
+
+	// Verificamos si se trata de una seccion
+	if (dirs.length == 4 && dirs[2]=='seccion'){
+		sec_id = dirs[3];
+
+		// Llamamos la funcion encargada de la seccion
+		go_section(sec_id);
 	}
 }
 
@@ -37,7 +58,6 @@ $(function() {
 				// Cada item (boton) constara de 4 datos, id: id del elemento, generado por Django
 				// name: nombre de la seccion, link: direccion a la que apuntara el boton y
 				// callback: funcion a ser disparada cuando se realice el click en el boton
-				bindearSeccion(id);
 
 				var boton = {id: id , name: name, link:'coleccion/'+id,callback:function(e) {
 
@@ -47,8 +67,6 @@ $(function() {
 
 					// se llama a la funcion de carga de la seccion clickeada
 					$.History.go(dir + id)
-
-					// go_to[dir](id);
 
 					}
 				}
@@ -102,7 +120,7 @@ $(function() {
 
 				// utilizamos el atributo data-src para guardar la url de la imagen a cargar
 				div.attr('data-src', 'media/' + value.fields.foto_campania);
-				div.css('width', document.width);
+				div.css('width', $(document).width());
 
 				// Agregamos el div al backsled
 				backsled.append(div);
@@ -135,6 +153,9 @@ $(function() {
 
 			// Lleva la cuenta de la foto actual
 			current_foto = 0;
+
+			// Esconder boton prev
+			$('#campaign .prev').hide();
 			
 			// Setea la position de backsled
 			backsled.css('left', '0px');
@@ -208,7 +229,7 @@ $(function() {
 						Pampa.hideLoading();
 
 						// Animamos el backsled
-						backsled.animate({left: (document.width * -current_foto) + 'px'});
+						backsled.animate({left: ($(document).width() * -current_foto) + 'px'});
 					}
 					next_img.src = foto_div.getAttribute('data-src');
 					// console.log('comienza la carga de: '+next_img.src);
@@ -216,7 +237,7 @@ $(function() {
 				}else{
 
 					// Animamos el backsled
-					backsled.animate({left: (document.width * -current_foto) + 'px'});
+					backsled.animate({left: ($(document).width() * -current_foto) + 'px'});
 				}
 			}
 
@@ -257,5 +278,146 @@ $(function() {
 		// Cambiamos el menu con los items princimpales
 		Pampa.changeMenu(Pampa.menuItems);
 	});
-});
 
+	// Funcion para manejar secciones
+	go_section = function(id){
+		console.log('Estas en la seccion: ' + id);
+
+		// Generar productos (TESTING!)	
+		n = 30 // Numero de productos a generar
+		$('#section-wrapper').html('');
+		for (i=0; i<n; i++){
+			newdiv = $('<div></div>');
+			newdiv.attr('data-productid', i);
+			newdiv.addClass('product');
+			opthtml = $('#product-opt').html();
+			newdiv.html(opthtml);
+			$('#section-wrapper').append(newdiv);
+		}
+
+		// Seteamos el menu con el boton back
+		Pampa.changeMenu([back_btn]);
+
+		// Funcion para obtener longitudes del css.
+		// Obtiene un string como '150px' y devuelve el valor 150
+		parse_long = function(string){
+			x = string.split('px');
+			return Number(x[0]);
+		}
+
+		// Definimos algunas variables, para el posicionamiento inicial
+		// Ver si se puede obtener de una mejor manera. Del CSS talvez.
+		cant_prod = $('#section-wrapper .product').length;
+		prod_width = parse_long($('.product').css('width'));
+		prod_margin = parse_long($('.product').css('margin'));
+
+		s_wrapper = $('#section-wrapper'); // El div contenedor de productos
+
+		// Calcular el ancho del contenedor a partir de la altura del producto y 
+		// altura del navegador, de manera que entren 3 filas de productos.
+		total_prod_size = prod_width + (prod_margin * 2);
+		width_in_prod_q = cant_prod / 3;
+		width_in_px = width_in_prod_q * total_prod_size;
+
+		// Seteamos el ancho
+		s_wrapper.css('width', width_in_px + 'px');
+
+		// Seteamos la escala en caso de volver, a esta seccion
+		s_wrapper.css({
+			'transform': 'scale('+ 1 +')'
+		});
+
+
+		// Unbindeamos eventos
+		$('#section-wrapper .product').unbind('click');
+
+		// Calculamos el margen superior del wrapper, para que no se superponga
+		// con el logo
+		logo_height = parse_long($('.logo').css('height'));
+		w_mtop_from_logo = ($(document).height() - parse_long(s_wrapper.css('height'))) / 2;
+		w_margin_top = logo_height + w_mtop_from_logo;
+
+		// Seteamos el margen superior e izquierdo del wrapper
+		s_wrapper.css({'margin-top': w_margin_top + 'px', 'margin-left': '110px'});
+
+		// Calculamos la escala del wrapper cuando se hace zoom al producto
+		zoom_scale = ($(document).height() / total_prod_size).toFixed(2);
+
+		// Unbindeamos y bindeamos nuevamente, los botones del producto a sus
+		// respectivas funciones
+		$('#section-wrapper .opt .optbut').unbind('click');
+
+		$('#section-wrapper .opt .zoomout').click(function(e){
+
+			// Removemos la clase zoomed de los productos
+			$('#section-wrapper .product').removeClass('zoomed');
+
+			// Seteamos la escala en caso de volver, a esta seccion
+			s_wrapper.css({ 'transform': 'scale('+ 1 +')'});
+
+			s_wrapper.css({
+				'marginLeft': w_current_margin,
+				'marginTop': '',
+			});
+
+			// Bindear eventos de nuevo
+			setTimeout(function(){$('.product').click(zoom_product)}, 1000);
+
+			$('#section').mousemove(moveWrapper);
+
+		});
+
+		// Guardamos la posicion del wrapper en una variable, para restaurar
+		// despues del zoomout
+		var w_current_margin = 0;
+
+
+		// Funcion que maneja cuando a un producto se le hace click
+		var zoom_product = function(event){
+
+			$('#section').unbind('mousemove');
+
+			// Quitamos la clase zoomed a todos los otros productos anteriores
+			$('#section-wrapper .product').removeClass('zoomed');
+
+			// Obtenemos la id del producto clickeado
+			productid = event.currentTarget.getAttribute('data-productid');	
+
+			// Agregamos la clase zoomed al producto activo
+			event.currentTarget.className += ' zoomed';
+
+			$('.product').unbind('click');
+
+			// Calculamos la ubicacion col, row. Del producto en el wrapper.
+			prod_row = Math.floor(productid / width_in_prod_q) + 1;
+			prod_col = (productid % width_in_prod_q) + 1;
+
+			console.log('row: ' + prod_row + ',col: ' + prod_col );
+
+			// Calculamos los margenes del producto, escalado.
+			esc_margin_left = -((prod_col-1) * total_prod_size * zoom_scale);
+			esc_margin_top = -((prod_row-1) * total_prod_size * zoom_scale);
+
+			// Ajustamos el margen izquierdo para centrar el producto en la pantalla.
+			esc_margin_left += ($(document).width() - (total_prod_size * zoom_scale))/2;
+
+			console.log('left: '+ esc_margin_left + ',top: ' + esc_margin_top)
+
+			// Animamos los margenes, y escalamos el wrapper completo
+			// Cambia el origen de la transformacion
+			s_wrapper.css({
+				'marginLeft': esc_margin_left.toFixed(2) + 'px',
+				'marginTop': esc_margin_top.toFixed(2) + 'px',
+				'transform-origin': '0% 0%',
+				'transform': 'scale('+ zoom_scale +')'
+			});
+		}
+
+		// Asignamos el handler para el evento click
+		$('#section-wrapper .product').click(zoom_product);
+
+		// Mostramos el div de la sección
+		$('#content #section').show();
+		$('#content').show();
+	}
+});
