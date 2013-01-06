@@ -1,5 +1,4 @@
 
-var test_scale;
 var go_section;
 
 // Definir solo boton atras al menu principal
@@ -309,7 +308,10 @@ $(function() {
 		// Ver si se puede obtener de una mejor manera. Del CSS talvez.
 		cant_prod = $('#section-wrapper .product').length;
 		prod_width = parse_long($('.product').css('width'));
-		prod_margin = parse_long($('.product').css('margin'));
+
+		// Se utiliza el margen por compatibilidad, ya que firefox, no devuelve
+		// valores para la propiedad css margin corta
+		prod_margin = parse_long($('.product').css('marginLeft')); 
 
 		s_wrapper = $('#section-wrapper'); // El div contenedor de productos
 
@@ -317,7 +319,7 @@ $(function() {
 		// altura del navegador, de manera que entren 3 filas de productos.
 		total_prod_size = prod_width + (prod_margin * 2);
 		width_in_prod_q = cant_prod / 3;
-		width_in_px = width_in_prod_q * total_prod_size;
+		width_in_px = width_in_prod_q * total_prod_size; // Fix firefox
 
 		// Seteamos el ancho
 		s_wrapper.css('width', width_in_px + 'px');
@@ -338,10 +340,13 @@ $(function() {
 		w_margin_top = logo_height + w_mtop_from_logo;
 
 		// Seteamos el margen superior e izquierdo del wrapper
-		s_wrapper.css({'margin-top': w_margin_top + 'px', 'margin-left': '110px'});
+		s_wrapper.css({'margin-top': w_margin_top + 'px', 'margin-left': w_mtop_from_logo + 'px'});
 
 		// Calculamos la escala del wrapper cuando se hace zoom al producto
 		zoom_scale = ($(document).height() / total_prod_size).toFixed(2);
+
+		// Guardamos current_left para restaurarlo despues del zoomout
+		var w_current_left = 0;
 
 		// Unbindeamos y bindeamos nuevamente, los botones del producto a sus
 		// respectivas funciones
@@ -355,30 +360,54 @@ $(function() {
 			// Seteamos la escala en caso de volver, a esta seccion
 			s_wrapper.css({ 'transform': 'scale('+ 1 +')'});
 
-			s_wrapper.css({
-				'marginLeft': w_current_margin,
-				'marginTop': '',
-			});
-
 			// Bindear eventos de nuevo
 			setTimeout(function(){$('.product').click(zoom_product)}, 1000);
 
-			$('#section').mousemove(moveWrapper);
+			// Reseteamos los margenes del wrapper
+			s_wrapper.css({'margin-top': w_margin_top + 'px', 'margin-left': w_mtop_from_logo + 'px'});
+
+			// Set draggable w otra vez
+			make_w_draggable();
+
+			// Reset move cursor
+			s_wrapper.css('cursor', 'move');
 
 		});
 
-		// Guardamos la posicion del wrapper en una variable, para restaurar
-		// despues del zoomout
-		var w_current_margin = 0;
+		var make_w_draggable = function(){
+			// Hacemos que #section-wrapper sea 'draggable' en el eje x
+			s_wrapper.draggable({
+				axis: 'x',
+		        helper: function(){
+		            // Create an invisible div as the helper. It will move and
+		            // follow the cursor as usual.
+		            return $('<div></div>').css('opacity',0);
+		        },
+		        drag: function(event, ui){
+		            // During dragging, animate the original object to
+		            // follow the invisible helper with custom easing.
+		            var p = ui.helper.position();
+		            $(this).stop().animate({
+		                left: p.left
+		            },1000,'easeOutCirc');
+		        }
+		    });
+		}
+
+		make_w_draggable();
 
 
 		// Funcion que maneja cuando a un producto se le hace click
 		var zoom_product = function(event){
 
-			$('#section').unbind('mousemove');
+			// Ponemos el cursoro normal
+			s_wrapper.css('cursor', 'auto');
 
 			// Quitamos la clase zoomed a todos los otros productos anteriores
 			$('#section-wrapper .product').removeClass('zoomed');
+
+			// Quitamos el draggable al wrapper
+			s_wrapper.draggable('destroy');
 
 			// Obtenemos la id del producto clickeado
 			productid = event.currentTarget.getAttribute('data-productid');	
@@ -392,8 +421,6 @@ $(function() {
 			prod_row = Math.floor(productid / width_in_prod_q) + 1;
 			prod_col = (productid % width_in_prod_q) + 1;
 
-			console.log('row: ' + prod_row + ',col: ' + prod_col );
-
 			// Calculamos los margenes del producto, escalado.
 			esc_margin_left = -((prod_col-1) * total_prod_size * zoom_scale);
 			esc_margin_top = -((prod_row-1) * total_prod_size * zoom_scale);
@@ -401,16 +428,15 @@ $(function() {
 			// Ajustamos el margen izquierdo para centrar el producto en la pantalla.
 			esc_margin_left += ($(document).width() - (total_prod_size * zoom_scale))/2;
 
-			console.log('left: '+ esc_margin_left + ',top: ' + esc_margin_top)
-
 			// Animamos los margenes, y escalamos el wrapper completo
 			// Cambia el origen de la transformacion
 			s_wrapper.css({
-				'marginLeft': esc_margin_left.toFixed(2) + 'px',
+				'marginLeft': esc_margin_left.toFixed(2) - parse_long(s_wrapper.css('left')).toFixed(2) + 'px',
 				'marginTop': esc_margin_top.toFixed(2) + 'px',
 				'transform-origin': '0% 0%',
 				'transform': 'scale('+ zoom_scale +')'
 			});
+
 		}
 
 		// Asignamos el handler para el evento click
