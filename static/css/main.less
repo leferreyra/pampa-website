@@ -197,8 +197,8 @@ body {
 			height: 160px;
 			width: 160px;
 			margin: 10px;
-			background-image: url('http://localhost:8000/media/productos/test-product_2.160x160.png');
 			background-size: cover;
+			background-position: center center;
 			float: left;
 
 			.opt {
@@ -208,6 +208,7 @@ body {
 				opacity: 0;
 				transition-property: opacity;
 				transition-duration: 0.5s;
+				transition-delay: 0.5s;
 				transition-timing-function: ease-in-out;
 				width: 0px;
 				overflow: hidden;
@@ -222,6 +223,11 @@ body {
 					background-repeat: no-repeat;
 					cursor: pointer;
 					background-size: 10px 30px;
+					border-radius: 1px;
+
+					transition-property: background-color;
+					transition-duration: 0.3s;
+					transition-timing-function: ease-in-out;
 
 					&:hover {
 						background-color: @rojo;

@@ -251,9 +251,14 @@ Pampa.setTopMenuDelays = function(){
 	});
 }
 
+// Guardamos los items, actuales.
+Pampa.currentMenuItems = Pampa.menuItems;
 
 // Intercambia los elementos actuales del menu por otros elementos
 Pampa.changeMenuItems = function(btnlist){
+
+	// Guardamos los elementos actuales del menu
+	Pampa.currentMenuItems = btnlist;
 
 	// Borra los elementos actuales
 	Pampa.clearMenu();
