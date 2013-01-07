@@ -1,6 +1,18 @@
 
 // Archivo principal que contiene toda la logica del sitio web
 
+// Definir solo boton atras al menu principal
+var back_btn = {
+	id:'',
+	link:'/',
+	name:'BACK',
+	callback: function(){
+
+		// Volvemos al menu principal
+		$.History.go('');
+	}
+}
+
 // Definimos el espacio de nombres de la app
 var Pampa = {}
 
@@ -32,6 +44,7 @@ Pampa.resources_loading_state = {
 	'fonts': false,
 	'images': false,
 	'background': false,
+	'collection_sections': false
 }
 
 Pampa.load = function(){
@@ -40,9 +53,54 @@ Pampa.load = function(){
 	Pampa.load_images();
 	Pampa.load_background();
 	Pampa.load_font();
+	Pampa.load_collection_sections();
 
 }
 
+Pampa.load_collection_sections = function(){
+
+	// Pido al servidor todas las secciones
+	$.getJSON('/collection/', function(data) {
+
+		var json = $.parseJSON(data);
+		// lista de botones que se añadiran al menu, depende de la cantidad de 
+		// elementos que tenga la coleccion
+
+		var list_button = [];
+
+		for (var i = 0; i <= json.length - 1; i++) {
+
+			var id = json[i].pk
+			var name = json[i].fields.nombre
+
+			// Cada item (boton) constara de 4 datos, id: id del elemento, generado por Django
+			// name: nombre de la seccion, link: direccion a la que apuntara el boton y
+			// callback: funcion a ser disparada cuando se realice el click en el boton
+
+			var boton = {id: id , name: name, link:'coleccion/'+id,callback:function(e) {
+
+				// se recupera el elemento que fue clickeado
+				var id = $(e.currentTarget).attr('data-id');
+				var dir = '/coleccion/seccion/';
+
+				// se llama a la funcion de carga de la seccion clickeada
+				$.History.go(dir + id);
+
+				}
+			}
+
+			// se agrega el boton a la lista
+			list_button.push(boton);
+		};
+
+		Pampa.collection_sections_buttons = list_button;
+		console.log(list_button);
+
+		// Cambiamos el estado de carga
+		Pampa.resources_loading_state['collection_sections'] = true;
+		Pampa.check_loading_state();
+	});	
+}
 
 Pampa.load_images = function(){
 
@@ -258,7 +316,7 @@ Pampa.currentMenuItems = Pampa.menuItems;
 Pampa.changeMenuItems = function(btnlist){
 
 	// Guardamos los elementos actuales del menu
-	Pampa.currentMenuItems = btnlist;
+	Pampa.currentMenuItems = btnlist.slice();
 
 	// Borra los elementos actuales
 	Pampa.clearMenu();
