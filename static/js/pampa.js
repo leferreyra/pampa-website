@@ -432,7 +432,7 @@ Pampa.setUpMusic = function(){
 	threeSixtyPlayer.config = {
 
 	    playNext: true,   // stop after one sound, or play through list until end
-	    autoPlay: false,   // start playing the first sound right away
+	    autoPlay: true,   // start playing the first sound right away
 	    allowMultiple: false,  // let many sounds play at once (false = only one sound playing at a time)
 	    loadRingColor: '#333', // how much has loaded
 	    playRingColor: '#d40000', // how much has played

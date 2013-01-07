@@ -324,7 +324,7 @@ $(function() {
 				// Coloca la imagen como fondo del div del producto
 				newdiv.css('background-image', 'url("'+producto.miniatura_1+'")');
 
-				console.log('comienza la carga de ' + producto.miniatura_1);
+				// console.log('comienza la carga de ' + producto.miniatura_1);
 
 				// Insertamos el nuevo html al div #seciont-wrapper, que contiene
 				// todos los div con clase .product
@@ -333,7 +333,7 @@ $(function() {
 
 			// Funcion para control de la carga de las miniaturas de los productos
 			var check_prod_img_loaded = function(){
-					console.log('loaded: '+ prod_min_loaded);
+					// console.log('loaded: '+ prod_min_loaded);
 				if (prod_min_loaded == prod_min_total){
 
 					// Todas las miniaturas cargadas!
@@ -362,7 +362,14 @@ $(function() {
 			// Calcular el ancho del contenedor a partir de la altura del producto y 
 			// altura del navegador, de manera que entren 3 filas de productos.
 			total_prod_size = prod_width + (prod_margin * 2);
-			width_in_prod_q = cant_prod / 3;
+			product_rows = 3;	
+
+			width_in_prod_q = cant_prod / product_rows;
+
+			if ((cant_prod % product_rows) != 0){
+				width_in_prod_q = Math.floor(width_in_prod_q) + 1;
+			}
+
 			width_in_px = width_in_prod_q * total_prod_size; // Fix firefox
 
 			// Seteamos el ancho
@@ -370,21 +377,22 @@ $(function() {
 
 			// Seteamos la escala en caso de volver, a esta seccion
 			s_wrapper.css({
-				'transform': 'scale('+ 1 +')'
+				'transform': 'scale('+ 1 +')',
+				'left' : '0px'
 			});
-
 
 			// Unbindeamos eventos
 			$('#section-wrapper .product').unbind('click');
 
 			// Calculamos el margen superior del wrapper, para que no se superponga
 			// con el logo
-			logo_height = parse_long($('.logo').css('height'));
-			w_mtop_from_logo = ($(document).height() - parse_long(s_wrapper.css('height'))) / 2;
-			w_margin_top = logo_height + w_mtop_from_logo;
+			logo_height = $('.logo').height() + (parse_long($('.logo').css('marginTop'))*2);
+			w_mtop_from_logo = ($(document).height() - s_wrapper.height() - logo_height) / 2;
+			w_margin_top = w_mtop_from_logo + logo_height;
 
 			// Seteamos el margen superior e izquierdo del wrapper
-			s_wrapper.css({'margin-top': w_margin_top + 'px', 'margin-left': w_mtop_from_logo + 'px'});
+			s_wrapper.css({'marginTop': w_margin_top + 'px', 'marginLeft': 50 + 'px'});
+
 
 			// Calculamos la escala del wrapper cuando se hace zoom al producto
 			zoom_scale = ($(document).height() / total_prod_size).toFixed(2);
@@ -408,7 +416,7 @@ $(function() {
 				setTimeout(function(){$('.product').click(zoom_product)}, 500);
 
 				// Reseteamos los margenes del wrapper
-				s_wrapper.css({'margin-top': w_margin_top + 'px', 'margin-left': w_mtop_from_logo + 'px'});
+				s_wrapper.css({'margin-top': w_margin_top + 'px', 'margin-left': 50 + 'px'});
 
 				// Set draggable w otra vez
 				make_w_draggable();
