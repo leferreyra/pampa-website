@@ -1,6 +1,18 @@
 
 // Archivo principal que contiene toda la logica del sitio web
 
+// Definir solo boton atras al menu principal
+var back_btn = {
+	id:'',
+	link:'/',
+	name:'BACK',
+	callback: function(){
+
+		// Volvemos al menu principal
+		$.History.go('');
+	}
+}
+
 // Definimos el espacio de nombres de la app
 var Pampa = {}
 
@@ -32,6 +44,7 @@ Pampa.resources_loading_state = {
 	'fonts': false,
 	'images': false,
 	'background': false,
+	'collection_sections': false
 }
 
 Pampa.load = function(){
@@ -40,9 +53,54 @@ Pampa.load = function(){
 	Pampa.load_images();
 	Pampa.load_background();
 	Pampa.load_font();
+	Pampa.load_collection_sections();
 
 }
 
+Pampa.load_collection_sections = function(){
+
+	// Pido al servidor todas las secciones
+	$.getJSON('/collection/', function(data) {
+
+		var json = $.parseJSON(data);
+		// lista de botones que se añadiran al menu, depende de la cantidad de 
+		// elementos que tenga la coleccion
+
+		var list_button = [];
+
+		for (var i = 0; i <= json.length - 1; i++) {
+
+			var id = json[i].pk
+			var name = json[i].fields.nombre
+
+			// Cada item (boton) constara de 4 datos, id: id del elemento, generado por Django
+			// name: nombre de la seccion, link: direccion a la que apuntara el boton y
+			// callback: funcion a ser disparada cuando se realice el click en el boton
+
+			var boton = {id: id , name: name, link:'coleccion/'+id,callback:function(e) {
+
+				// se recupera el elemento que fue clickeado
+				var id = $(e.currentTarget).attr('data-id');
+				var dir = '/coleccion/seccion/';
+
+				// se llama a la funcion de carga de la seccion clickeada
+				$.History.go(dir + id);
+
+				}
+			}
+
+			// se agrega el boton a la lista
+			list_button.push(boton);
+		};
+
+		Pampa.collection_sections_buttons = list_button;
+		console.log(list_button);
+
+		// Cambiamos el estado de carga
+		Pampa.resources_loading_state['collection_sections'] = true;
+		Pampa.check_loading_state();
+	});	
+}
 
 Pampa.load_images = function(){
 
@@ -62,7 +120,7 @@ Pampa.load_images = function(){
 	$.each(image_list, function(index, img){
 		img.onload = function(){
 
-			// console.log('Cargada la imagen '+img.getAttribute('data-src'));
+			// // console.log('Cargada la imagen '+img.getAttribute('data-src'));
 
 			// Cuando el evento onload se produce, se llama a la funcion check_images_loaded
 			Pampa.check_images_loaded();
@@ -85,7 +143,7 @@ Pampa.check_images_loaded = function(){
 	// el estado de carga de las imagenes, y se llama al callback que controla los
 	// estados de carga de los recursos.
 	if (Pampa.loaded_img_count == Pampa.img_count){
-		// console.log('Todas las imagenes cargadas');
+		// // console.log('Todas las imagenes cargadas');
 		Pampa.resources_loading_state['images'] = true;
 		Pampa.check_loading_state();
 	}
@@ -112,14 +170,14 @@ Pampa.load_font = function(){
 		inactive: function(){
 
 			// Debug output
-			console.log('Fuentes inactivas...');
-			console.log('Intentando nuevamente...');
+			// console.log('Fuentes inactivas...');
+			// console.log('Intentando nuevamente...');
 
 			// Intentar cargar las fuentes nuevamente
 			WebFont.load(WebFontConfig);
 		},
 		loading: function(){
-			console.log('Cargando fuentes...');
+			// console.log('Cargando fuentes...');
 		},
 	}
 
@@ -183,7 +241,7 @@ Pampa.check_loading_state = function(){
 // Funcion llamada cuando todos los recursos han sido cargados
 Pampa.on_load_complete = function(){
 
-	console.log('Carga completa');
+	// console.log('Carga completa');
 	// Comenzamos a cargar y reproducir la musica
 	Pampa.setUpMusic()
 
@@ -217,7 +275,7 @@ Pampa.menuItems = [
 		id: '/coleccion',
 		name: 'Colección',
 		link: '#/collection',
-		callback: function(){ $.History.go('/coleccion'); console.log('Se ha presionado el boton, coleccion'); }
+		callback: function(){ $.History.go('/coleccion'); }
 	},
 
 	{ 
@@ -251,9 +309,14 @@ Pampa.setTopMenuDelays = function(){
 	});
 }
 
+// Guardamos los items, actuales.
+Pampa.currentMenuItems = Pampa.menuItems;
 
 // Intercambia los elementos actuales del menu por otros elementos
 Pampa.changeMenuItems = function(btnlist){
+
+	// Guardamos los elementos actuales del menu
+	Pampa.currentMenuItems = btnlist.slice();
 
 	// Borra los elementos actuales
 	Pampa.clearMenu();
@@ -369,7 +432,7 @@ Pampa.setUpMusic = function(){
 	threeSixtyPlayer.config = {
 
 	    playNext: true,   // stop after one sound, or play through list until end
-	    autoPlay: false,   // start playing the first sound right away
+	    autoPlay: true,   // start playing the first sound right away
 	    allowMultiple: false,  // let many sounds play at once (false = only one sound playing at a time)
 	    loadRingColor: '#333', // how much has loaded
 	    playRingColor: '#d40000', // how much has played
@@ -508,7 +571,7 @@ Pampa.bindContactForm = function(){
 			// Realizamos la consulta
 			$.get('contacto/', data, function(json){
 				response = $.parseJSON(json);
-				console.log(response);
+				// console.log(response);
 
 				// Cambiamos el estado del formulario
 				$('.contacto-box').removeClass('loading');

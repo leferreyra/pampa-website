@@ -1,61 +1,21 @@
-var go_to = {
-	// todo lo necesario para que luego del click en el boton coleccion se realice la carga
-	// del menu con los links a las distintas secciones
-	'/coleccion' : function() {
-		//Pampa.showLoading();
-		// Pido al servidor todas las secciones
-		$.getJSON('/collection/', function(data) {
 
-			var json = $.parseJSON(data);
-			// lista de botones que se añadiran al menu, depende de la cantidad de 
-			// elementos que tenga la coleccion
-			var list_button = [];
-			for (var i = 0; i <= json.length - 1; i++) {
-				var id = json[i].pk
-				var name = json[i].fields.nombre
-				// Cada item (boton) constara de 4 datos, id: id del elemento, generado por Django
-				// name: nombre de la seccion, link: direccion a la que apuntara el boton y
-				// callback: funcion a ser disparada cuando se realice el click en el boton
-				bindearSeccion(id);
-				var boton = {id: id , name: name, link:'coleccion/'+id,callback:function(e) {
-					// se recupera el elemento que fue clickeado
-					var id = $(e.currentTarget).attr('data-id');
-					var dir = '/coleccion/seccion/';
-					// se llama a la funcion de carga de la seccion clickeada
-					$.History.go(dir + id)
-					// go_to[dir](id);
+var go_section;
 
-					}
-				}
-				// se agrega el boton a la lista
-				list_button.push(boton);
-			};
-			Pampa.changeMenu(list_button);
-		})	
-		//Pampa.hideLoading();
-	},
-	'/coleccion/seccion/' : function(name) {
-		// Pampa.showLoading();
-		document.location.hash = '#/coleccion/seccion/'+name;
-		$.getJSON('collection/'+name, function(data) {
-			for (var i = data.length - 1; i >= 0; i--) {
-				console.log(data[i].imagen_1)
-			};
-		})
-		// Pampa.hideLoading();
-	}
-}
+// Definimos funcion para parsear el hash de la url, cada vez
+// que cambia. Asi cuando cambia a una seccion en particular
+// podemos extraer la id de dicha seccion
+window.onhashchange = function(){
 
+	// Obtener hash
+	hash = window.location.hash;
+	dirs = hash.split('/');
 
-// Definir solo boton atras al menu principal
-back_btn = {
-	id:'',
-	link:'/',
-	name:'BACK',
-	callback: function(){
+	// Verificamos si se trata de una seccion
+	if (dirs.length == 4 && dirs[2]=='seccion'){
+		sec_id = dirs[3];
 
-		// Volvemos al menu principal
-		$.History.go('');
+		// Llamamos la funcion encargada de la seccion
+		go_section(sec_id);
 	}
 }
 
@@ -63,7 +23,10 @@ back_btn = {
 $(function() {
 
 	$.History.bind('/coleccion',function(state) {
-		go_to[state]();
+
+		btns = Pampa.collection_sections_buttons;
+		btns.splice(0,0,back_btn);
+		Pampa.changeMenu(btns);
 	});
 
 	$.History.bind('/campania',function(state) {
@@ -107,7 +70,7 @@ $(function() {
 
 				// utilizamos el atributo data-src para guardar la url de la imagen a cargar
 				div.attr('data-src', 'media/' + value.fields.foto_campania);
-				div.css('width', document.width);
+				div.css('width', $(document).width());
 
 				// Agregamos el div al backsled
 				backsled.append(div);
@@ -116,12 +79,12 @@ $(function() {
 
 			// Cargamos la primer foto antes de ocultar el preloader
 			var first_img = $('#campaign .backsled div')[0];
-			console.log('primer div');
-			console.log(first_img);
+			// console.log('primer div');
+			// console.log(first_img);
 
 			var img = new Image();
 			img.onload = function(){
-				console.log('carga completa de: ' + img.src);
+				// console.log('carga completa de: ' + img.src);
 
 				// Cambiamos el estado loaded a true
 				fotos[0].fields.loaded = true;
@@ -136,10 +99,13 @@ $(function() {
 
 			// Trigger la carga de la primera imagen
 			img.src = first_img.getAttribute('data-src');
-			console.log('cargando.. ' + img.src);
+			// console.log('cargando.. ' + img.src);
 
 			// Lleva la cuenta de la foto actual
 			current_foto = 0;
+
+			// Esconder boton prev
+			$('#campaign .prev').hide();
 			
 			// Setea la position de backsled
 			backsled.css('left', '0px');
@@ -196,12 +162,12 @@ $(function() {
 				if (!fotos[current_foto].fields.loaded){
 
 					foto_div = $('#campaign .backsled div')[current_foto]
-					console.log('foto_div: ' + foto_div);
+					// console.log('foto_div: ' + foto_div);
 					Pampa.showLoading();
 
 					var next_img = new Image();
 					next_img.onload = function(){
-						console.log('carga completa: '+ next_img.src);
+						// console.log('carga completa: '+ next_img.src);
 
 						// Cambiamos el estado loaded a true
 						fotos[current_foto].fields.loaded = true;
@@ -213,15 +179,15 @@ $(function() {
 						Pampa.hideLoading();
 
 						// Animamos el backsled
-						backsled.animate({left: (document.width * -current_foto) + 'px'});
+						backsled.animate({left: ($(document).width() * -current_foto) + 'px'});
 					}
 					next_img.src = foto_div.getAttribute('data-src');
-					console.log('comienza la carga de: '+next_img.src);
+					// console.log('comienza la carga de: '+next_img.src);
 
 				}else{
 
 					// Animamos el backsled
-					backsled.animate({left: (document.width * -current_foto) + 'px'});
+					backsled.animate({left: ($(document).width() * -current_foto) + 'px'});
 				}
 			}
 
@@ -247,7 +213,7 @@ $(function() {
 	});
 
 	$.History.bind('/tienda',function(state) {
-		console.log(state);
+		// console.log(state);
 	});
 
 	$.History.bind('',function() {
@@ -263,20 +229,302 @@ $(function() {
 		Pampa.changeMenu(Pampa.menuItems);
 	});
 
-	bindearSeccion = function(id) {
-		$.History.bind('/coleccion/seccion/' + id,function() {
+	// Funcion para manejar secciones
+	go_section = function(id){
 
-			go_to['/coleccion/seccion/'](id);
-		})
-	};
+		// Guardamos los items del menu actuales, para restaurarlos luego.
+		old_menu_items = Pampa.currentMenuItems;
 
-	var hash = location.hash;
+		// Creamos un nuevo boton
+		colec_back_btn = {
+			id:'',
+			link:'/coleccion',
+			name:'BACK',
+			callback: function(){
 
-	if (hash.substring(1,20) == '/coleccion/seccion/') {
-		//se llama al array donde se encuentran las funciones, en este caso es la funcion
-		// de carga de secciones, se le pasa la seccion que se desea cargar, la que se encuentra
-		// al final del hash
-		go_to[hash.substring(1,20)](hash.substring(20,hash.length));
+				// En caso de que no se hubiera terminado de cargar algo,
+				// ocultamos el loading.
+				Pampa.hideLoading();
+
+				// Ocultar la seccion y el div content.
+				$('#content').hide();
+				$('#content #section').hide();
+
+				// Volvemos al menu de secciones
+				$.History.go('/coleccion');
+			}
+		}
+
+		// Seteamos el menu con el boton back
+		Pampa.changeMenu([colec_back_btn]);
+
+		// Mostramos el preloader
+		Pampa.showLoading();
+
+		// Definimos variables para controlar la cantidad de miniaturas cargadas
+		var prod_min_loaded = 0;
+		var prod_min_total = 0;
+
+		// Comenzamos la carga
+		$.get('/collection/' + id, function(json){
+
+			// json alias
+			var productos = json;
+
+			// Definimos total de miniaturas a cargar
+			prod_min_total = json.length;
+
+			// Vaciamos el wrapper, de todo elemento previamente insertado
+			$('#section-wrapper').html('');
+
+			// Insertar los elementos del DOM para cada producto
+			$.each(json, function(index, producto){
+
+				// Creamos un nuevo div
+				newdiv = $('<div></div>');
+
+				// Asociamos un atributo data con la id del producto
+				newdiv.attr('data-productid', producto.id_producto);
+
+				// Agregamos un atributo data-index, ya que el productid
+				// no sirve para posicionar el producto en el wrapper
+				newdiv.attr('data-index', index);
+
+				// Agregamos las clases necesarias
+				newdiv.addClass('product');
+
+				// Elementos html para las opciones del producto
+				opthtml = $('#product-opt').html();
+				newdiv.html(opthtml);
+
+				// Comenzar a cargar la imagen en miniatura
+				prod_min_img = new Image();
+
+				// Al cargar, llamar a una funcion que checkea si todas las imagenes fueron cargadas.
+				prod_min_img.onload = function(){
+
+					// Incrementamos el contador de imagenes cargadas
+					prod_min_loaded++;
+
+					// Llamamos a la funcion de control de carga.
+					check_prod_img_loaded();
+
+				}
+
+				// Comenzamos la carga
+				prod_min_img.src = producto.miniatura_1;
+
+				// Desactivamos los botones de .opt que no apliquen
+				if (producto.miniatura_2 == ''){
+
+					// Desactivar boton de imagen_2 si el producto no la tiene.
+					newdiv.find('.turn').css('display', 'none');
+				}
+
+				// Coloca la imagen como fondo del div del producto
+				newdiv.css('background-image', 'url("'+producto.miniatura_1+'")');
+
+				// console.log('comienza la carga de ' + producto.miniatura_1);
+
+				// Insertamos el nuevo html al div #seciont-wrapper, que contiene
+				// todos los div con clase .product
+				$('#section-wrapper').append(newdiv);
+			});
+
+			// Funcion para control de la carga de las miniaturas de los productos
+			var check_prod_img_loaded = function(){
+					// console.log('loaded: '+ prod_min_loaded);
+				if (prod_min_loaded == prod_min_total){
+
+					// Todas las miniaturas cargadas!
+					Pampa.hideLoading();
+				}
+			}
+
+			// Funcion para obtener longitudes del css.
+			// Obtiene un string como '150px' y devuelve el valor 150
+			parse_long = function(string){
+				x = string.split('px');
+				return Number(x[0]);
+			}
+
+			// Definimos algunas variables, para el posicionamiento inicial
+			// Ver si se puede obtener de una mejor manera. Del CSS talvez.
+			cant_prod = $('#section-wrapper .product').length;
+			prod_width = parse_long($('.product').css('width'));
+
+			// Se utiliza el margen por compatibilidad, ya que firefox, no devuelve
+			// valores para la propiedad css margin corta
+			prod_margin = parse_long($('.product').css('marginLeft')); 
+
+			s_wrapper = $('#section-wrapper'); // El div contenedor de productos
+
+			// Calcular el ancho del contenedor a partir de la altura del producto y 
+			// altura del navegador, de manera que entren 3 filas de productos.
+			total_prod_size = prod_width + (prod_margin * 2);
+			product_rows = 3;	
+
+			width_in_prod_q = cant_prod / product_rows;
+
+			if ((cant_prod % product_rows) != 0){
+				width_in_prod_q = Math.floor(width_in_prod_q) + 1;
+			}
+
+			width_in_px = width_in_prod_q * total_prod_size; // Fix firefox
+
+			// Seteamos el ancho
+			s_wrapper.css('width', width_in_px + 'px');
+
+			// Seteamos la escala en caso de volver, a esta seccion
+			s_wrapper.css({
+				'transform': 'scale('+ 1 +')',
+				'left' : '0px'
+			});
+
+			// Unbindeamos eventos
+			$('#section-wrapper .product').unbind('click');
+
+			// Calculamos el margen superior del wrapper, para que no se superponga
+			// con el logo
+			logo_height = $('.logo').height() + (parse_long($('.logo').css('marginTop'))*2);
+			w_mtop_from_logo = ($(document).height() - s_wrapper.height() - logo_height) / 2;
+			w_margin_top = w_mtop_from_logo + logo_height;
+
+			// Seteamos el margen superior e izquierdo del wrapper
+			s_wrapper.css({'marginTop': w_margin_top + 'px', 'marginLeft': 50 + 'px'});
+
+
+			// Calculamos la escala del wrapper cuando se hace zoom al producto
+			zoom_scale = ($(document).height() / total_prod_size).toFixed(2);
+
+			// Guardamos current_left para restaurarlo despues del zoomout
+			var w_current_left = 0;
+
+			// Unbindeamos y bindeamos nuevamente, los botones del producto a sus
+			// respectivas funciones
+			$('#section-wrapper .opt .optbut').unbind('click');
+
+			$('#section-wrapper .opt .zoomout').click(function(e){
+
+				// Removemos la clase zoomed de los productos
+				$('#section-wrapper .product').removeClass('zoomed');
+
+				// Seteamos la escala en caso de volver, a esta seccion
+				s_wrapper.css({ 'transform': 'scale('+ 1 +')'});
+
+				// Bindear eventos de nuevo
+				setTimeout(function(){$('.product').click(zoom_product)}, 500);
+
+				// Reseteamos los margenes del wrapper
+				s_wrapper.css({'margin-top': w_margin_top + 'px', 'margin-left': 50 + 'px'});
+
+				// Set draggable w otra vez
+				make_w_draggable();
+
+				// Reset move cursor
+				s_wrapper.css('cursor', 'move');
+
+			});
+
+			var make_w_draggable = function(){
+				// Hacemos que #section-wrapper sea 'draggable' en el eje x
+				s_wrapper.draggable({
+					axis: 'x',
+			        helper: function(){
+			            // Create an invisible div as the helper. It will move and
+			            // follow the cursor as usual.
+			            return $('<div></div>').css('opacity',0);
+			        },
+			        drag: function(event, ui){
+			            // During dragging, animate the original object to
+			            // follow the invisible helper with custom easing.
+			            var p = ui.helper.position();
+			            $(this).stop().animate({
+			                left: p.left
+			            },1000,'easeOutCirc');
+			        }
+			    });
+			}
+
+			make_w_draggable();
+
+
+			// Funcion que maneja cuando a un producto se le hace click
+			var zoom_product = function(event){
+
+				// Obtenemos la id del producto clickeado
+				productid = event.currentTarget.getAttribute('data-index');	
+
+				// Cargamos la imagen con mas resolucion
+				var hd_img = new Image();
+
+				img_url = productos[productid].imagen_1;
+				hd_img.onload = function(){
+
+					// Reemplazamos la imagen con menor resolucion con esta
+					$(s_wrapper.find('.product[data-index="'+productid+'"]'))
+						.css('background-image', 'url("'+img_url+'")');
+				}
+
+				hd_img.src = img_url;
+
+				// Ponemos el cursoro normal
+				s_wrapper.css('cursor', 'auto');
+
+				// Quitamos la clase zoomed a todos los otros productos anteriores
+				$('#section-wrapper .product').removeClass('zoomed');
+
+				// Quitamos el draggable al wrapper
+				s_wrapper.draggable('destroy');
+
+				// Agregamos la clase zoomed al producto activo
+				event.currentTarget.className += ' zoomed';
+
+				$('.product').unbind('click');
+
+				// Calculamos la ubicacion col, row. Del producto en el wrapper.
+				prod_row = Math.floor(productid / width_in_prod_q) + 1;
+				prod_col = (productid % width_in_prod_q) + 1;
+
+				// Calculamos los margenes del producto, escalado.
+				esc_margin_left = -((prod_col-1) * total_prod_size * zoom_scale);
+				esc_margin_top = -((prod_row-1) * total_prod_size * zoom_scale);
+
+				// Ajustamos el margen izquierdo para centrar el producto en la pantalla.
+				esc_margin_left += ($(document).width() - (total_prod_size * zoom_scale))/2;
+
+				// Animamos los margenes, y escalamos el wrapper completo
+				// Cambia el origen de la transformacion
+				s_wrapper.css({
+					'marginLeft': esc_margin_left.toFixed(2) - parse_long(s_wrapper.css('left')).toFixed(2) + 'px',
+					'marginTop': esc_margin_top.toFixed(2) + 'px',
+					'transform-origin': '0% 0%',
+					'transform': 'scale('+ zoom_scale +')'
+				});
+
+			}
+
+			// Asignamos el handler para el evento click
+			$('#section-wrapper .product').click(zoom_product);
+
+			// Mostramos el div de la sección
+			$('#content #section').show();
+			$('#content').show();
+
+		});
+
+		// Generar productos (TESTING!)	
+		// n = 6 // Numero de productos a generar
+		// $('#section-wrapper').html('');
+		// for (i=0; i<n; i++){
+		// 	newdiv = $('<div></div>');
+		// 	newdiv.attr('data-productid', i);
+		// 	newdiv.addClass('product');
+		// 	opthtml = $('#product-opt').html();
+		// 	newdiv.html(opthtml);
+		// 	$('#section-wrapper').append(newdiv);
+		// }
+
+			
 	}
 });
-

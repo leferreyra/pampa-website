@@ -34,13 +34,13 @@ def productos(request, id_seccion):
                 'mensaje': producto.mensaje,
                 'imagen_1': producto.imagen_1.url,
                 'imagen_2': '',
-                'miniatura_1': producto.imagen_1.url_200x200,
+                'miniatura_1': producto.imagen_1.url_160x160,
                 'miniatura_2': '',
             }
 
         if producto.imagen_2: 
             newobj['imagen_2'] = producto.imagen_2.url
-            newobj['miniatura_2'] = producto.imagen_2.url_200x200,
+            newobj['miniatura_2'] = producto.imagen_2.url_160x160,
 
         productos.append(newobj)
     

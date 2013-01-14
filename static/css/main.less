@@ -175,6 +175,84 @@ body {
 	}
 }
 
+#section {
+
+	display: none;
+	background: white;
+
+	#section-wrapper{
+
+		position: absolute;
+		height: 600px;
+		margin-top: 130px;
+		transition-property: margin, transform;
+		transition-duration: 0.5s, 0.5s;
+		transition-timing-function: ease-in-out, ease-in-out;
+		transform-origin: 0%, 0%;
+		left: 0px;
+		cursor: move;
+
+		.product {
+
+			height: 160px;
+			width: 160px;
+			margin: 10px;
+			background-size: cover;
+			background-position: center center;
+			float: left;
+
+			.opt {
+
+				float: right;
+				margin-right: -12px;
+				opacity: 0;
+				transition-property: opacity;
+				transition-duration: 0.5s;
+				transition-delay: 0.5s;
+				transition-timing-function: ease-in-out;
+				width: 0px;
+				overflow: hidden;
+
+
+				.optbut {
+					width: 10px;
+					height: 10px;
+					background: rgba(0,0,0,0.8);
+					margin-bottom: 2px;
+					background-image: url('../img/product-icons.png');
+					background-repeat: no-repeat;
+					cursor: pointer;
+					background-size: 10px 30px;
+					border-radius: 1px;
+
+					transition-property: background-color;
+					transition-duration: 0.3s;
+					transition-timing-function: ease-in-out;
+
+					&:hover {
+						background-color: @rojo;
+					}
+					&.zoomout {
+						background-position: top center;
+					}
+					&.turn{
+						background-position: center center;
+					}
+					&.cart {
+						background-position: bottom center;
+					}
+				}
+			}
+			&.zoomed {
+				.opt{
+					opacity: 1;
+					width: 10px;
+				}
+			}
+		}
+	}
+}
+
 
 
 #red-line {

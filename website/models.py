@@ -18,8 +18,8 @@ class Producto(models.Model):
 
     nombre = models.CharField(max_length=100)
     mensaje= models.CharField(max_length=15, null= True, blank= True)
-    imagen_1 = ImageWithThumbsField(upload_to='productos', verbose_name='Imágen delantera', sizes=((200,200),))
-    imagen_2 = ImageWithThumbsField(upload_to='productos', verbose_name='Imágen trasera', null= True, blank= True, sizes=((200,200),))
+    imagen_1 = ImageWithThumbsField(upload_to='productos', verbose_name='Imágen delantera', sizes=((160,160),))
+    imagen_2 = ImageWithThumbsField(upload_to='productos', verbose_name='Imágen trasera', null= True, blank= True, sizes=((160,160),))
     secciones = models.ManyToManyField(Seccion)
 
 

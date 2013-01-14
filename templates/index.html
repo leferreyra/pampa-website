@@ -20,6 +20,7 @@
         <script type="text/javascript" src='{{ STATIC_URL }}js/prefixfree.js'></script>
         <script type="text/javascript" src='{{ STATIC_URL }}js/less.js'></script>
         <script type="text/javascript" src='{{ STATIC_URL }}js/jquery.js'></script>
+        <script type="text/javascript" src='{{ STATIC_URL }}js/jquery-ui.js'></script>
         <script type="text/javascript" src='{{ STATIC_URL }}js/mustache.js'></script>
         <script type="text/javascript" src='{{ STATIC_URL }}js/history/jquery.history.js'></script>
         <script type="text/javascript" src='{{ STATIC_URL }}js/pampa.js'></script>
@@ -46,6 +47,15 @@
             </div>
         </script>
 
+        <!-- Definimos la plantilla del html para el menu del producto-->
+        <script id='product-opt' type='text/html'>
+            <div class='opt'>
+                <div class='optbut zoomout'></div>
+                <div class='optbut turn'></div>
+                <div class='optbut cart'></div>
+            </div>
+        </script>
+
         <!-- Definimos el html para el backbutton -->
         <div id='back-button-html' style='display: none;'>
             <div class='back-button'>Atrás</div>
@@ -58,6 +68,7 @@
 
         <!-- Este div se utiliza para mostrar el contenido de cada seccion del sitio -->
         <div id="content">
+
             <!-- Seccion campaña -->
             <div id="campaign" class='section'>
                 <div class="b next"></div>
@@ -66,6 +77,7 @@
                     <!-- Los contenidos de este div son insertados dinamicamente -->
                 </div>
             </div>
+
             <!-- Seccion contacto -->
             <div id="contact" class="section">
                 <div class="contacto-box">
@@ -77,6 +89,13 @@
                     </div>
                 </div>
             </div>
+
+            <div id="section" class="section">
+                <div id="section-wrapper">
+                    <!-- Los contenidos de este div son insertados dinamicamente -->
+                </div>
+            </div>
+
         </div>
 
 
@@ -114,11 +133,16 @@
 
         <div class='footer'>
             <p>
-                <img data-src="{{ STATIC_URL }}img/marcas/piccadilly.png" alt="">
-                <img data-src="{{ STATIC_URL }}img/marcas/lady-stork.png" alt="">
-                <img data-src="{{ STATIC_URL }}img/marcas/west-coast.png" alt="">
-                <img data-src="{{ STATIC_URL }}img/marcas/taverniti.png" alt="">
-                <img data-src="{{ STATIC_URL }}img/marcas/scombro.png" alt="">
+                <a href="http://www.piccadilly.com.br/" target="_blank">
+                    <img data-src="{{ STATIC_URL }}img/marcas/piccadilly.png" alt=""></a>
+                <a href="http://www.ladystork.com/" target="_blank">
+                    <img data-src="{{ STATIC_URL }}img/marcas/lady-stork.png" alt=""></a>
+                <a href="http://www.westcoast.com.br/" target="_blank">
+                    <img data-src="{{ STATIC_URL }}img/marcas/west-coast.png" alt=""></a>
+                <a href="http://www.taverniti.com.ar/" target="_blank">
+                    <img data-src="{{ STATIC_URL }}img/marcas/taverniti.png" alt=""></a>
+                <a href="http://www.scombrojeans.com.ar/" target="_blank">
+                    <img data-src="{{ STATIC_URL }}img/marcas/scombro.png" alt=""></a>
             </p>
         </div>
     </body>
