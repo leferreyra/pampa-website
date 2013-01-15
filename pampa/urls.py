@@ -13,7 +13,8 @@ urlpatterns = patterns('',
 
     # Vistas json
     url(r'^collection/(?P<id_seccion>\d+)$', 'website.views.productos'),
-    url(r'^collection/', "website.views.secciones"),
+    url(r'^collectionMan/', "website.views.seccionesHombre"),
+    url(r'^collectionWoman/', "website.views.seccionesMujer"),
     url(r'^campaign/', "website.views.campania"),
     url(r'^background/', "website.views.fondos"),
     url(r'^contacto/', "website.views.contacto"),

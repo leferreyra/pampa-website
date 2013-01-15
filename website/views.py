@@ -15,11 +15,15 @@ def index(request):
     return render_to_response('index.html', {}, context_instance = RequestContext(request))
 
 
-def secciones(request):
+def seccionesHombre(request):
 
-    secciones = serializers.serialize('json', Seccion.objects.all().reverse()) 
+    secciones = serializers.serialize('json', Seccion.objects.filter(sexo='H').reverse()) 
     return HttpResponse(simplejson.dumps(secciones), mimetype='application/json')
 
+def seccionesMujer(request):
+
+    secciones = serializers.serialize('json', Seccion.objects.filter(sexo='M').reverse()) 
+    return HttpResponse(simplejson.dumps(secciones), mimetype='application/json')
 
 def productos(request, id_seccion):
     

@@ -8,10 +8,12 @@ from website.thumbs import ImageWithThumbsField
 class Seccion(models.Model):
     
     nombre = models.CharField(max_length=50, unique=True)
+    opciones_sexo = (('H', 'Hombre'), ('M', 'Mujer'))
+    sexo = models.CharField(max_length=1, choices=opciones_sexo)
 
     
     def __unicode__(self):
-        return self.nombre
+        return self.nombre + '(' + self.sexo + ')'
 
 
 class Producto(models.Model):
