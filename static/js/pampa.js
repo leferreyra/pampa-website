@@ -9,12 +9,28 @@ var back_btn = {
 	callback: function(){
 
 		// Volvemos al menu principal
-		$.History.go('');
+		window.history.back();
 	}
 }
 
 // Definimos el espacio de nombres de la app
 var Pampa = {}
+
+// Definimos el menu genero de colecciones 
+Pampa.menuItemsGen = [
+	{ 
+		id: '',
+		name: 'Hombres',
+		link: '#/coleccion/hombres',
+		callback: function(){$.History.go('/coleccion/hombres');}
+	},
+	{ 
+		id: '',
+		name: 'Mujeres',
+		link: '#/coleccion/mujeres',
+		callback: function(){$.History.go('/coleccion/mujeres');}
+	},
+];
 
 // Disparamos todo cuando el DOM esta cargado
 $(document).ready(function(){
@@ -44,7 +60,8 @@ Pampa.resources_loading_state = {
 	'fonts': false,
 	'images': false,
 	'background': false,
-	'collection_sections': false
+	'collection_sections_men': false,
+	'collection_sections_women': false
 }
 
 Pampa.load = function(){
@@ -60,7 +77,7 @@ Pampa.load = function(){
 Pampa.load_collection_sections = function(){
 
 	// Pido al servidor todas las secciones
-	$.getJSON('/collection/', function(data) {
+	$.getJSON('/collectionMan/', function(data) {
 
 		var json = $.parseJSON(data);
 		// lista de botones que se añadiran al menu, depende de la cantidad de 
@@ -93,11 +110,53 @@ Pampa.load_collection_sections = function(){
 			list_button.push(boton);
 		};
 
-		Pampa.collection_sections_buttons = list_button;
+		Pampa.collection_sections_buttons_m = list_button;
 		console.log(list_button);
 
 		// Cambiamos el estado de carga
-		Pampa.resources_loading_state['collection_sections'] = true;
+		Pampa.resources_loading_state['collection_sections_men'] = true;
+		Pampa.check_loading_state();
+	});	
+
+	// Pido al servidor todas las secciones
+	$.getJSON('/collectionWoman/', function(data) {
+
+		var json = $.parseJSON(data);
+		// lista de botones que se añadiran al menu, depende de la cantidad de 
+		// elementos que tenga la coleccion
+
+		var list_button = [];
+
+		for (var i = 0; i <= json.length - 1; i++) {
+
+			var id = json[i].pk
+			var name = json[i].fields.nombre
+
+			// Cada item (boton) constara de 4 datos, id: id del elemento, generado por Django
+			// name: nombre de la seccion, link: direccion a la que apuntara el boton y
+			// callback: funcion a ser disparada cuando se realice el click en el boton
+
+			var boton = {id: id , name: name, link:'coleccion/'+id,callback:function(e) {
+
+				// se recupera el elemento que fue clickeado
+				var id = $(e.currentTarget).attr('data-id');
+				var dir = '/coleccion/seccion/';
+
+				// se llama a la funcion de carga de la seccion clickeada
+				$.History.go(dir + id);
+
+				}
+			}
+
+			// se agrega el boton a la lista
+			list_button.push(boton);
+		};
+
+		Pampa.collection_sections_buttons_w = list_button;
+		console.log(list_button);
+
+		// Cambiamos el estado de carga
+		Pampa.resources_loading_state['collection_sections_women'] = true;
 		Pampa.check_loading_state();
 	});	
 }

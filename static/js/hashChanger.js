@@ -24,10 +24,52 @@ $(function() {
 
 	$.History.bind('/coleccion',function(state) {
 
-		btns = Pampa.collection_sections_buttons;
+		// // En caso de que no se hubiera terminado de cargar algo,
+		// // ocultamos el loading.
+		// Pampa.hideLoading();
+
+		// // Ocultar la seccion y el div content.
+		// $('#content').hide();
+		// $('#content #section').hide();
+
+		btns = Pampa.menuItemsGen;
 		btns.splice(0,0,back_btn);
 		Pampa.changeMenu(btns);
+
 	});
+
+	$.History.bind('/coleccion/hombres',function(state) {
+
+		// En caso de que no se hubiera terminado de cargar algo,
+		// ocultamos el loading.
+		Pampa.hideLoading();
+
+		// Ocultar la seccion y el div content.
+		$('#content').hide();
+		$('#content #section').hide();
+
+		btns = Pampa.collection_sections_buttons_m;
+		btns.splice(0,0,back_btn);
+		Pampa.changeMenu(btns);
+
+	});
+
+	$.History.bind('/coleccion/mujeres',function(state) {
+
+		// En caso de que no se hubiera terminado de cargar algo,
+		// ocultamos el loading.
+		Pampa.hideLoading();
+
+		// Ocultar la seccion y el div content.
+		$('#content').hide();
+		$('#content #section').hide();
+
+		btns = Pampa.collection_sections_buttons_w;
+		btns.splice(0,0,back_btn);
+		Pampa.changeMenu(btns);
+
+	});
+
 
 	$.History.bind('/campania',function(state) {
 
@@ -238,20 +280,13 @@ $(function() {
 		// Creamos un nuevo boton
 		colec_back_btn = {
 			id:'',
-			link:'/coleccion',
+			link:'',
 			name:'BACK',
 			callback: function(){
 
-				// En caso de que no se hubiera terminado de cargar algo,
-				// ocultamos el loading.
-				Pampa.hideLoading();
-
-				// Ocultar la seccion y el div content.
-				$('#content').hide();
-				$('#content #section').hide();
-
+				console.log('going back');
 				// Volvemos al menu de secciones
-				$.History.go('/coleccion');
+				window.history.back();
 			}
 		}
 

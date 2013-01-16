@@ -7,7 +7,7 @@ from website.thumbs import ImageWithThumbsField
 
 class Seccion(models.Model):
     
-    nombre = models.CharField(max_length=50, unique=True)
+    nombre = models.CharField(max_length=50)
     opciones_sexo = (('H', 'Hombre'), ('M', 'Mujer'))
     sexo = models.CharField(max_length=1, choices=opciones_sexo)
 
