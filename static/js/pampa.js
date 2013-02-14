@@ -34,7 +34,14 @@ Pampa.menuItemsGen = [
 
 // Disparamos todo cuando el DOM esta cargado
 $(document).ready(function(){
-
+	
+	// Dirty stuff for IE 
+	if ($.browser.msie){
+		alert('executing IE')
+		// Llamar solo si se entra desde IE
+		IECompatibility();
+	}
+	
 	// Cargamos el menu con los botones iniciales
 	Pampa.menuElement = $('.menu')[0];
 	Pampa.changeMenuItems(Pampa.menuItems);
@@ -55,6 +62,16 @@ $(document).ready(function(){
 });
 
 
+function IECompatibility(){
+	
+	// Rotamos el div de next de la seccion campañas, porque IE no
+	// soporta transforms rotate()
+
+	$('.b.next').rotate(180);
+
+}
+
+
 // Diccionario que contiene el estado de carga de cada recurso
 Pampa.resources_loading_state = {
 	'fonts': false,
@@ -65,7 +82,7 @@ Pampa.resources_loading_state = {
 }
 
 Pampa.load = function(){
-
+       
 	// Comenzar la carga por recursos
 	Pampa.load_images();
 	Pampa.load_background();
@@ -208,6 +225,8 @@ Pampa.check_images_loaded = function(){
 	}
 }
 
+// Contador para cantidad de pruebas y errores de fuentes.
+Pampa.load_font_err_count = 0;
 
 // Cargamos las fuentes, usando Google WebfontLoader
 Pampa.load_font = function(){
@@ -233,7 +252,17 @@ Pampa.load_font = function(){
 			// console.log('Intentando nuevamente...');
 
 			// Intentar cargar las fuentes nuevamente
-			WebFont.load(WebFontConfig);
+			if (Pampa.load_font_err_count < 4){
+				WebFont.load(WebFontConfig);
+				Pampa.load_font_err_count++;
+				console.log('fallo '+Pampa.load_font_err_count);
+			}else{
+				// Marcamos el recurso de fuentes como cargado.
+				Pampa.resources_loading_state['fonts'] = true;
+
+				// Checkeamos el estado de todos los recursos.
+				Pampa.check_loading_state();
+			}
 		},
 		loading: function(){
 			// console.log('Cargando fuentes...');

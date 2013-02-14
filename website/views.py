@@ -40,6 +40,7 @@ def productos(request, id_seccion):
                 'imagen_2': '',
                 'miniatura_1': producto.imagen_1.url_160x160,
                 'miniatura_2': '',
+                'url_store': producto.url_store,
             }
 
         if producto.imagen_2: 

@@ -36,6 +36,8 @@ $(function() {
 		btns.splice(0,0,back_btn);
 		Pampa.changeMenu(btns);
 
+		console.log('cambiando hash a collection');
+
 	});
 
 	$.History.bind('/coleccion/hombres',function(state) {
@@ -269,6 +271,8 @@ $(function() {
 
 		// Cambiamos el menu con los items princimpales
 		Pampa.changeMenu(Pampa.menuItems);
+
+		console.log('cambiando hash a home');
 	});
 
 	// Funcion para manejar secciones
@@ -354,6 +358,18 @@ $(function() {
 
 					// Desactivar boton de imagen_2 si el producto no la tiene.
 					newdiv.find('.turn').css('display', 'none');
+				}
+
+				if (producto.url_store == ''){
+
+					// Desactivar boton de imagen_2 si el producto no la tiene.
+					newdiv.find('.cart').css('display', 'none');
+				}else{
+
+					// Agregar funcion para abrir producto en store
+					newdiv.find('.cart')[0].onclick = function(e){
+						window.open(producto.url_store, '_blank');
+					}
 				}
 
 				// Coloca la imagen como fondo del div del producto
