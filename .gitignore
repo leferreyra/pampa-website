@@ -7,3 +7,4 @@ settings.py
 *.swp
 *~
 media/
+pampa/wsgi.py
