@@ -14,8 +14,23 @@ framework.
 
 """
 import os
+import sys
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pampa.settings")
+
+path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+if path not in sys.path:
+	sys.path.append(path)
+
+
+sys.path.append('/home/pampamoda/pampa/')
+sys.path.append('/home/pampamoda/pampa/pampa')
+
+
+os.environ["DJANGO_SETTINGS_MODULE"] = "pampa.settings"
+os.environ['PYTHON_EGG_CACHE'] = '/tmp/'
+
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
