@@ -35,7 +35,6 @@ def productos(request, id_seccion):
         newobj = {
                 'id_producto': producto.id,
                 'nombre': producto.nombre,
-                'mensaje': producto.mensaje,
                 'imagen_1': producto.imagen_1.url,
                 'imagen_2': '',
                 'miniatura_1': producto.imagen_1.url_160x160,
