@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from website.models import *
 from django.contrib.auth.models import User
 from django.http import HttpResponse

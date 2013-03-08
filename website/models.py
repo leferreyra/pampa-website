@@ -33,7 +33,7 @@ class Producto(models.Model):
 class Campania(models.Model):
 
     nombre = models.CharField(max_length=100)
-    foto_campania = models.ImageField(upload_to='campaña', verbose_name='Foto Campaña')
+    foto_campania = models.ImageField(upload_to='campania', verbose_name='Foto Campaña')
 
 
     def __unicode__(self):
