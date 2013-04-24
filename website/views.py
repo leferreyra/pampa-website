@@ -76,7 +76,7 @@ def contacto(request):
     admin_user = User.objects.get(username='admin')
 
     # envia desde una direccion del sistema no-reply al administrador del sitio django
-    send_mail(subject, body, 'noreply@pampamoda.com.ar', [ admin.email ])
+    send_mail(subject, body, 'noreply@pampamoda.com.ar', [ admin_user.email ])
 
     # devolvemos el status del la consulta
     response = {
