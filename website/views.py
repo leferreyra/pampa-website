@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
-from django.core import serializers
+from django.core import serializers, send_mail
 from django.utils import simplejson
 from django.template import RequestContext
 from django.shortcuts import render_to_response
@@ -75,7 +75,7 @@ def contacto(request):
     admin_user = User.objects.get(username='admin')
 
     # envia desde una direccion del sistema no-reply al administrador del sitio django
-    send_mail(subject, body, 'no-reply@pampamoda.com.ar', [ admin.email ])
+    send_mail(subject, body, 'noreply@pampamoda.com.ar', [ admin.email ])
 
     # devolvemos el status del la consulta
     response = {
