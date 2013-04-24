@@ -663,6 +663,8 @@ Pampa.bindContactForm = function(){
 
 				// Cambiamos el estado del formulario
 				$('.contacto-box').removeClass('loading');
+				$('#submit-contact').html('Enviado Correctamente!');
+				$('#submit-contact').css('background-color', 'green');
 			})
 		}
 	});
